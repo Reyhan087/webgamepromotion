@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Honkai: Star Rail | Jelajahi Galaksi</title>
+  <meta name="description" content="Landing page fan-made promosi game Honkai: Star Rail - RPG turn-based luar angkasa dari HoYoverse." />
+
+  <!-- Google Fonts: Orbitron (display/futuristik) + Rajdhani (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Extend Tailwind dengan warna & font custom biar konsisten sama CSS variables di style.css
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            space: {
+              deep: '#05060f',
+              alt: '#0a0e1f',
+              card: '#10132a',
+            },
+            fire: '#ff6b45',
+            ice: '#3fd0f0',
+            gold: '#f7c948',
+            nebula: '#8b5cf6',
+          },
+          fontFamily: {
+            display: ['Orbitron', 'sans-serif'],
+            body: ['Rajdhani', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- GSAP + ScrollTrigger (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="bg-space-deep text-slate-200 font-body overflow-x-hidden">
+
+  <!-- ==================== LOADING SCREEN ==================== -->
+  <div id="loader" class="loader">
+    <div class="loader-logo">HSR</div>
+    <div class="loader-bar"><span></span></div>
+  </div>
+
+  <!-- ==================== STARFIELD BACKGROUND (canvas, dipasang fixed full page) ==================== -->
+  <canvas id="starfield" class="starfield-canvas" aria-hidden="true"></canvas>
+
+  <!-- ==================== NAVBAR ==================== -->
+  <header id="navbar" class="navbar">
+    <nav class="navbar-inner">
+      <a href="#home" class="navbar-logo">HONKAI<span>: STAR RAIL</span></a>
+
+      <ul class="navbar-links" id="navLinks">
+        <li><a href="#home" class="nav-link">Home</a></li>
+        <li><a href="#characters" class="nav-link">Character</a></li>
+        <li><a href="#gameplay" class="nav-link">Gameplay</a></li>
+        <li><a href="#news" class="nav-link">News</a></li>
+        <li><a href="#download" class="nav-link nav-link--cta">Download</a></li>
+      </ul>
+
+      <button type="button" id="hamburger" class="hamburger" aria-label="Buka menu navigasi" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section id="home" class="hero">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="hero-content">
+        <h1 class="hero-title" id="heroTitle" aria-label="HONKAI: STAR RAIL">
+          <span class="hero-title-line" data-line>HONKAI</span>
+          <span class="hero-title-line hero-title-line--accent" data-line>: STAR RAIL</span>
+        </h1>
+        <p class="hero-tagline" id="heroTagline">
+          Rangkai takdirmu di antara bintang. Jelajahi galaksi, taklukkan musuh, dan temukan misteri Aeon bersama Astral Express.
+        </p>
+        <div class="hero-cta" id="heroCta">
+          <a href="#characters" class="btn btn-primary">Jelajahi Karakter</a>
+          <a href="#download" class="btn btn-outline">Download Now</a>
+        </div>
+      </div>
+      <a href="#about" class="scroll-indicator" aria-label="Scroll ke bawah">
+        <span></span>
+      </a>
+    </section>
+
+    <!-- ==================== ABOUT SECTION ==================== -->
+    <section id="about" class="section about-section">
+      <div class="section-inner">
+        <p class="reveal-up about-text">
+          <strong>Honkai: Star Rail</strong> adalah game RPG turn-based bertema luar angkasa, tempat kamu memimpin
+          rombongan Astral Express menjelajahi planet demi planet yang penuh misteri. Bangun tim dari karakter dengan
+          <strong>Path</strong> dan <strong>Elemen</strong> yang beragam, susun strategi bertarung, dan ungkap kisah
+          epik di balik keberadaan Aeon-Aeon yang membentuk semesta.
+        </p>
+      </div>
+    </section>
+
+    <!-- ==================== FEATURED CHARACTERS SECTION ==================== -->
+    <section id="characters" class="section characters-section">
+      <div class="section-inner">
+        <h2 class="section-title reveal-up">Featured Characters</h2>
+        <p class="section-subtitle reveal-up">Kenali sebagian penjelajah yang akan menemanimu di sepanjang perjalanan</p>
+
+        <div class="character-grid" id="characterGrid">
+
+          <!-- Card 1: Himeko -->
+          <article class="char-card" data-element="fire">
+            <div class="char-card-img-wrap">
+              <img src="assets/images/heroes/himeko.png" alt="Himeko" class="char-card-img" loading="lazy" />
+            </div>
+            <div class="char-card-body">
+              <span class="char-card-tag">Fire &middot; Erudition</span>
+              <h3 class="char-card-name">Himeko</h3>
+              <p class="char-card-role">Pemimpin ekspedisi Astral Express &middot; dukungan tim jarak jauh &middot; senjata tombak</p>
+            </div>
+          </article>
+
+          <!-- Card 2: Rin Tohsaka (Fate x HSR collab) -->
+          <article class="char-card" data-element="ice">
+            <div class="char-card-img-wrap">
+              <img src="assets/images/heroes/rin-tohsaka.png" alt="Rin Tohsaka" class="char-card-img" loading="lazy" />
+            </div>
+            <div class="char-card-body">
+              <span class="char-card-tag">Ice &middot; Kolaborasi Fate</span>
+              <h3 class="char-card-name">Rin Tohsaka</h3>
+              <p class="char-card-role">Karakter kolaborasi Fate x HSR &middot; kostum &amp; elemen edisi spesial</p>
+            </div>
+          </article>
+
+          <!-- Card 3: Gilgamesh (Fate x HSR collab) -->
+          <article class="char-card" data-element="gold">
+            <div class="char-card-img-wrap">
+              <img src="assets/images/heroes/gilgamesh.png" alt="Gilgamesh" class="char-card-img" loading="lazy" />
+            </div>
+            <div class="char-card-body">
+              <span class="char-card-tag">Imaginary &middot; Kolaborasi Fate</span>
+              <h3 class="char-card-name">Gilgamesh</h3>
+              <p class="char-card-role">Karakter kolaborasi Fate x HSR &middot; sang Raja para Pahlawan</p>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="characters-cta reveal-up">
+          <a href="character.html" class="btn btn-outline">Lihat Semua Karakter</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TRAILER SECTION ==================== -->
+    <section id="news" class="section trailer-section">
+      <div class="section-inner">
+        <h2 class="section-title reveal-up">Official Trailer</h2>
+        <div class="trailer-frame reveal-up">
+          <div class="trailer-frame-corner tl"></div>
+          <div class="trailer-frame-corner tr"></div>
+          <div class="trailer-frame-corner bl"></div>
+          <div class="trailer-frame-corner br"></div>
+          <div class="trailer-video-wrap">
+            <iframe
+              src="https://www.youtube.com/embed/xT88aPknvag"
+              title="Honkai: Star Rail Official Trailer"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+              loading="lazy">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== GAMEPLAY HIGHLIGHTS SECTION ==================== -->
+    <section id="gameplay" class="section gameplay-section">
+      <div class="section-inner">
+        <h2 class="section-title reveal-up">Gameplay Highlights</h2>
+        <p class="section-subtitle reveal-up">Sekilas pengalaman yang menantimu di Honkai: Star Rail</p>
+
+        <div class="gameplay-grid" id="gameplayGrid">
+
+          <div class="gameplay-card">
+            <div class="gameplay-icon" aria-hidden="true">
+              <!-- turn-based / chess-like icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 3v18M4 8h16M4 16h16" stroke-linecap="round" />
+                <circle cx="12" cy="12" r="9" />
+              </svg>
+            </div>
+            <h3 class="gameplay-title">Turn-based Strategic Combat</h3>
+            <p class="gameplay-desc">Susun strategi tiap giliran, manfaatkan kelemahan elemen musuh, dan lancarkan combo mematikan.</p>
+          </div>
+
+          <div class="gameplay-card">
+            <div class="gameplay-icon" aria-hidden="true">
+              <!-- galaxy / planet icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="4" />
+                <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)" />
+              </svg>
+            </div>
+            <h3 class="gameplay-title">Eksplorasi Galaksi dan Planet</h3>
+            <p class="gameplay-desc">Jelajahi dunia terbuka penuh rahasia, dari kota futuristik hingga reruntuhan kuno antar bintang.</p>
+          </div>
+
+          <div class="gameplay-card">
+            <div class="gameplay-icon" aria-hidden="true">
+              <!-- path/element sparkle icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 2l2.2 6.8H21l-5.6 4.1 2.2 6.8L12 15.6l-5.6 4.1 2.2-6.8L3 8.8h6.8z" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <h3 class="gameplay-title">Sistem Path dan Elemen</h3>
+            <p class="gameplay-desc">Kombinasikan Path dan Elemen tiap karakter untuk membangun tim dengan gaya bertarung unikmu sendiri.</p>
+          </div>
+
+          <div class="gameplay-card">
+            <div class="gameplay-icon" aria-hidden="true">
+              <!-- story/book icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15.5a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 0 4 22V5.5z" stroke-linejoin="round" />
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke-linecap="round" />
+              </svg>
+            </div>
+            <h3 class="gameplay-title">Karakter dengan Cerita Mendalam</h3>
+            <p class="gameplay-desc">Setiap penjelajah membawa kisah, motivasi, dan hubungan antar karakter yang kaya dan emosional.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== DOWNLOAD SECTION (anchor untuk CTA) ==================== -->
+    <section id="download" class="section download-section">
+      <div class="section-inner download-inner reveal-up">
+        <h2 class="section-title">Siap Memulai Perjalanan?</h2>
+        <p class="section-subtitle">Unduh Honkai: Star Rail sekarang dan mulai jelajahi galaksi.</p>
+        <a href="#" class="btn btn-primary btn-lg">Download Now</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="footer-logo">HONKAI: STAR RAIL</span>
+          <p class="footer-team">Fan Page dibuat oleh Astral Express Web Team</p>
+        </div>
+
+        <div class="footer-social">
+          <a href="#" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">Instagram</a>
+          <a href="#" class="social-link" aria-label="YouTube" target="_blank" rel="noopener">YouTube</a>
+        </div>
+      </div>
+
+      <hr class="footer-divider" />
+
+      <p class="footer-copyright">
+        &copy; All rights reserved by miHoYo / HoYoverse. Other properties and any right, title, and interest thereof and therein (intellectual property rights included) not derived from Honkai: Star Rail belong to their respective owners. This is a non-commercial fan-made project created for a web development competition.
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
