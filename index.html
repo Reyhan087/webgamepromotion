@@ -11,6 +11,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
+  <!-- Gambar slide pertama hero di-preload biar banner langsung tampil -->
+  <link rel="preload" as="image" href="assets/images/logo/Screen 1.webp" />
+
   <!-- Tailwind CSS (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -42,29 +45,28 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=20261001" />
 </head>
 <body class="bg-space-deep text-slate-200 font-body overflow-x-hidden">
 
   <!-- ==================== LOADING SCREEN ==================== -->
   <div id="loader" class="loader">
-    <div class="loader-logo">HSR</div>
+    <div class="loader-logo">
+      <img src="assets/images/logo/HSR_Logo.webp" alt="Honkai: Star Rail" width="690" height="542" fetchpriority="high" />
+      <span class="loader-shine" aria-hidden="true"></span>
+    </div>
     <div class="loader-bar"><span></span></div>
   </div>
-
-  <!-- ==================== STARFIELD BACKGROUND (canvas, dipasang fixed full page) ==================== -->
-  <canvas id="starfield" class="starfield-canvas" aria-hidden="true"></canvas>
 
   <!-- ==================== NAVBAR ==================== -->
   <header id="navbar" class="navbar">
     <nav class="navbar-inner">
-      <a href="#home" class="navbar-logo">HONKAI<span>: STAR RAIL</span></a>
 
       <ul class="navbar-links" id="navLinks">
         <li><a href="#home" class="nav-link">Home</a></li>
-        <li><a href="#characters" class="nav-link">Character</a></li>
+        <li><a href="character.html" class="nav-link">Character</a></li>
+        <li><a href="events.html" class="nav-link">Event</a></li>
         <li><a href="#gameplay" class="nav-link">Gameplay</a></li>
-        <li><a href="#news" class="nav-link">News</a></li>
         <li><a href="#download" class="nav-link nav-link--cta">Download</a></li>
       </ul>
 
@@ -76,109 +78,299 @@
 
   <main>
 
-    <!-- ==================== HERO SECTION ==================== -->
-    <section id="home" class="hero">
-      <div class="hero-glow" aria-hidden="true"></div>
-      <div class="hero-content">
-        <h1 class="hero-title" id="heroTitle" aria-label="HONKAI: STAR RAIL">
-          <span class="hero-title-line" data-line>HONKAI</span>
-          <span class="hero-title-line hero-title-line--accent" data-line>: STAR RAIL</span>
-        </h1>
-        <p class="hero-tagline" id="heroTagline">
-          Rangkai takdirmu di antara bintang. Jelajahi galaksi, taklukkan musuh, dan temukan misteri Aeon bersama Astral Express.
-        </p>
-        <div class="hero-cta" id="heroCta">
-          <a href="#characters" class="btn btn-primary">Jelajahi Karakter</a>
-          <a href="#download" class="btn btn-outline">Download Now</a>
-        </div>
+    <!-- ==================== HERO: BANNER CAROUSEL ====================
+         - Tiap slide = <article data-slide>. Tambah slide baru cukup copy satu <article>.
+         - data-align="left|right" mengatur posisi teks overlay (kiri/kanan bawah),
+           dipilih per banner supaya tidak menutupi judul/wajah yang sudah ada di gambar.
+         - Dot indicator dibuat otomatis oleh JS (lihat Carousel di main.js).
+    ================================================================= -->
+    <section id="home" class="hero-carousel" data-carousel="hero" data-interval="6000"
+             aria-roledescription="carousel" aria-label="Banner utama">
+
+      <!-- Logo game: hanya di Home, pojok kanan-atas hero (di bawah baris navbar) -->
+      <div class="hero-logo">
+        <img src="assets/images/logo/HSR_Logo.webp" alt="Honkai: Star Rail" width="690" height="542" />
+        <span class="hero-logo-shine" aria-hidden="true"></span>
       </div>
-      <a href="#about" class="scroll-indicator" aria-label="Scroll ke bawah">
-        <span></span>
-      </a>
+
+      <div class="carousel-track">
+
+        <!-- Slide 1 -->
+        <article class="hero-slide is-active" data-slide data-align="right" data-label="Cerita utama"
+                 aria-roledescription="slide" aria-label="1 dari 1">
+          <img src="assets/images/logo/Screen 1.webp" alt="Key visual Honkai: Star Rail - para Trailblazer Astral Express"
+               class="hero-slide-img hero-slide-img--kenburns" width="1672" height="941" fetchpriority="high" />
+          <div class="hero-slide-scrim" aria-hidden="true"></div>
+
+          <!-- Judul grafis: bobbing pelan + kilau diagonal (lihat .hero-title-art di style.css) -->
+          <div class="hero-title-art" aria-hidden="true">
+            <img src="assets/images/logo/Title Screen 1.webp" alt="" width="2095" height="750" />
+            <span class="hero-title-art-shine"></span>
+          </div>
+
+          <!-- Judul slide = grafis di atas; h1 tetap ada untuk screen reader & SEO -->
+          <h1 class="sr-only">Honkai: Star Rail - In Ravages Does the Whistle Sound</h1>
+
+          <!-- Tombol play trailer: pola .yt-lite yang sama dengan video gameplay.
+               Setelah diklik, .hero-play jadi pemutar 16:9 di tengah hero
+               (kelas .is-playing dari initHeroTrailer di main.js). -->
+          <div class="hero-play yt-lite" data-yt-id="xT88aPknvag" data-yt-title="Honkai: Star Rail Version 4.4 Trailer - In Ravages Does the Whistle Sound">
+            <button type="button" class="yt-lite-btn hero-play-btn" aria-label="Tonton trailer Versi 4.4: In Ravages Does the Whistle Sound">
+              <span class="hero-play-icon">
+                <img src="assets/images/logo/playbutton.webp" alt="" width="1312" height="1199" />
+                <span class="hero-play-shine" aria-hidden="true"></span>
+              </span>
+            </button>
+            <button type="button" class="hero-play-close" aria-label="Tutup video">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+            </button>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Fade ke warna section berikutnya (di atas semua slide, lihat .section-fade) -->
+      <div class="section-fade section-fade--bottom" aria-hidden="true"></div>
     </section>
 
     <!-- ==================== ABOUT SECTION ==================== -->
     <section id="about" class="section about-section">
-      <div class="section-inner">
-        <p class="reveal-up about-text">
+      <div class="section-inner about-inner">
+        <header class="about-head">
+          <span class="section-kicker">Tentang Game</span>
+          <span class="section-divider" aria-hidden="true"><i></i></span>
+          <h2 class="section-title about-title">Jelajahi Galaksi Bersama Astral Express</h2>
+        </header>
+        <p class="about-text">
           <strong>Honkai: Star Rail</strong> adalah game RPG turn-based bertema luar angkasa, tempat kamu memimpin
           rombongan Astral Express menjelajahi planet demi planet yang penuh misteri. Bangun tim dari karakter dengan
           <strong>Path</strong> dan <strong>Elemen</strong> yang beragam, susun strategi bertarung, dan ungkap kisah
           epik di balik keberadaan Aeon-Aeon yang membentuk semesta.
         </p>
+        <ul class="about-tags" aria-label="Sorotan game">
+          <li class="char-badge" style="--accent: var(--color-primary-light);">Turn-Based RPG</li>
+          <li class="char-badge" style="--accent: var(--color-cyan);">PC &middot; Mobile &middot; PS5</li>
+          <li class="char-badge" style="--accent: var(--color-gold);">Free to Play</li>
+        </ul>
       </div>
     </section>
 
-    <!-- ==================== FEATURED CHARACTERS SECTION ==================== -->
-    <section id="characters" class="section characters-section">
-      <div class="section-inner">
-        <h2 class="section-title reveal-up">Featured Characters</h2>
-        <p class="section-subtitle reveal-up">Kenali sebagian penjelajah yang akan menemanimu di sepanjang perjalanan</p>
+    <!-- ==================== CHARACTER SPOTLIGHT: CAROUSEL KARAKTER ====================
+         Ketiga slide punya struktur identik (lihat CSS "CHARACTER SPOTLIGHT"):
+         gradient tema + glow + light rays + cutout floating + partikel.
+         - data-theme="fire|ice|gold" -> warna glow, rays, badge & partikel.
+         - --cut-scale di .char-cutout -> menyamakan ukuran visual karakter
+           (tiap splash art punya margin transparan berbeda).
+         Tambah karakter baru: copy satu <article>, ganti gambar/teks/tema.
+         Section ini = carousel (.char-spotlight) + band trailer kolaborasi di bawahnya.
+    ================================================================================ -->
+    <section id="character-spotlight" class="char-section" aria-label="Character Spotlight">
+    <div class="char-spotlight" data-carousel="characters" data-interval="7000" data-theme="fire"
+         aria-roledescription="carousel" aria-label="Carousel karakter">
 
-        <div class="character-grid" id="characterGrid">
+      <div class="char-spotlight-label">
+        <span class="char-spotlight-kicker">Character Spotlight</span>
+      </div>
 
-          <!-- Card 1: Himeko -->
-          <article class="char-card" data-element="fire">
-            <div class="char-card-img-wrap">
-              <img src="assets/images/heroes/himeko.webp" alt="Himeko" class="char-card-img" width="2048" height="2048" loading="lazy" />
-            </div>
-            <div class="char-card-body">
-              <span class="char-card-tag">Fire &middot; Erudition</span>
-              <h3 class="char-card-name">Himeko</h3>
-              <p class="char-card-role">Pemimpin ekspedisi Astral Express &middot; dukungan tim jarak jauh &middot; senjata tombak</p>
-            </div>
-          </article>
+      <div class="carousel-track">
 
-          <!-- Card 2: Rin Tohsaka (Fate x HSR collab) -->
-          <article class="char-card" data-element="ice">
-            <div class="char-card-img-wrap">
-              <img src="assets/images/heroes/rin-tohsaka.webp" alt="Rin Tohsaka" class="char-card-img" width="2048" height="2048" loading="lazy" />
+        <!-- Slide: Himeko -->
+        <article class="char-slide is-active" data-slide data-theme="fire" data-label="Himeko"
+                 aria-roledescription="slide" aria-label="Himeko">
+          <div class="char-slide-bg" aria-hidden="true">
+            <span class="char-glow"></span>
+            <span class="char-rays"><i></i><i></i><i></i></span>
+          </div>
+          <div class="char-cutout" style="--cut-scale: 1.3; --cut-shift: 12%;">
+            <div class="char-layers">
+              <img src="assets/images/logo/Himeko Nova(background).webp" alt="" class="char-layer char-layer--bg" width="1560" height="1650" loading="lazy" style="--lx: 0%; --ly: -0.4%; --lw: 99.5%;" />
+              <img src="assets/images/logo/Himeko  Nova splash art.webp" alt="Himeko" class="char-layer char-layer--fg" width="2048" height="1996" loading="lazy" style="--lx: 2.73%; --ly: 4.69%; --lw: 79.25%;" />
             </div>
-            <div class="char-card-body">
-              <span class="char-card-tag">Ice &middot; Kolaborasi Fate</span>
-              <h3 class="char-card-name">Rin Tohsaka</h3>
-              <p class="char-card-role">Karakter kolaborasi Fate x HSR &middot; kostum &amp; elemen edisi spesial</p>
-            </div>
-          </article>
+          </div>
+          <div class="char-slide-scrim" aria-hidden="true"></div>
 
-          <!-- Card 3: Gilgamesh (Fate x HSR collab) -->
-          <article class="char-card" data-element="gold">
-            <div class="char-card-img-wrap">
-              <img src="assets/images/heroes/gilgamesh.webp" alt="Gilgamesh" class="char-card-img" width="2048" height="2048" loading="lazy" />
-            </div>
-            <div class="char-card-body">
-              <span class="char-card-tag">Imaginary &middot; Kolaborasi Fate</span>
-              <h3 class="char-card-name">Gilgamesh</h3>
-              <p class="char-card-role">Karakter kolaborasi Fate x HSR &middot; sang Raja para Pahlawan</p>
-            </div>
-          </article>
+          <div class="char-caption">
+            <span class="char-badge" data-anim>Fire &middot; Erudition</span>
+            <h3 class="char-title" data-anim>
+              <span class="char-title-art" style="--img-w: 1980; --img-h: 1080; --crop-x: 33; --crop-y: 217; --crop-w: 1905; --crop-h: 607;">
+                <img src="assets/images/logo/Himekonova title.webp" alt="Himeko Nova" width="1980" height="1080" loading="lazy" />
+                <span class="char-title-shine" aria-hidden="true" style="-webkit-mask-image: url('assets/images/logo/Himekonova%20title.webp'); mask-image: url('assets/images/logo/Himekonova%20title.webp');"></span>
+              </span>
+            </h3>
+            <div class="char-stars" data-anim aria-label="Rarity bintang 5">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="char-desc" data-anim>Navigator Astral Express yang elegan dan berani. Serangan api berskala luas untuk membakar seluruh barisan musuh.</p>
+          </div>
+        </article>
 
-        </div>
+        <!-- Slide: Rin Tohsaka -->
+        <article class="char-slide" data-slide data-theme="ice" data-label="Rin Tohsaka"
+                 aria-roledescription="slide" aria-label="Rin Tohsaka">
+          <div class="char-slide-bg" aria-hidden="true">
+            <span class="char-glow"></span>
+            <span class="char-rays"><i></i><i></i><i></i></span>
+          </div>
+          <div class="char-cutout" style="--cut-scale: 1.12;">
+            <div class="char-layers">
+              <img src="assets/images/logo/Rin Tohsaka (background).webp" alt="" class="char-layer char-layer--bg" width="1560" height="1650" loading="lazy" style="--lx: -3.13%; --ly: -5.08%; --lw: 102.75%;" />
+              <img src="assets/images/logo/Rin Tohsaka splash art.webp" alt="Rin Tohsaka" class="char-layer char-layer--fg" width="1560" height="1650" loading="lazy" style="--lx: -3.13%; --ly: -5.08%; --lw: 102.75%;" />
+            </div>
+          </div>
+          <div class="char-slide-scrim" aria-hidden="true"></div>
 
-        <div class="characters-cta reveal-up">
-          <a href="character.html" class="btn btn-outline">Lihat Semua Karakter</a>
+          <div class="char-caption">
+            <span class="char-badge" data-anim>Ice &middot; Kolaborasi Fate</span>
+            <h3 class="char-title" data-anim>
+              <span class="char-title-art" style="--img-w: 1980; --img-h: 1080; --crop-x: 74; --crop-y: 319; --crop-w: 1906; --crop-h: 368;">
+                <img src="assets/images/logo/Rin Title.webp" alt="Rin Tohsaka" width="1980" height="1080" loading="lazy" />
+                <span class="char-title-shine" aria-hidden="true" style="-webkit-mask-image: url('assets/images/logo/Rin%20Title.webp'); mask-image: url('assets/images/logo/Rin%20Title.webp');"></span>
+              </span>
+            </h3>
+            <div class="char-stars" data-anim aria-label="Rarity bintang 5">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="char-desc" data-anim>Magus berbakat dari Fuyuki. Karakter kolaborasi Fate x HSR dengan kostum &amp; elemen edisi spesial.</p>
+          </div>
+        </article>
+
+        <!-- Slide: Gilgamesh -->
+        <article class="char-slide" data-slide data-theme="gold" data-label="Gilgamesh"
+                 aria-roledescription="slide" aria-label="Gilgamesh">
+          <div class="char-slide-bg" aria-hidden="true">
+            <span class="char-glow"></span>
+            <span class="char-rays"><i></i><i></i><i></i></span>
+          </div>
+          <div class="char-cutout" style="--cut-scale: 1.12;">
+            <div class="char-layers">
+              <img src="assets/images/logo/Gilgamesh (background).webp" alt="" class="char-layer char-layer--bg" width="1560" height="1650" loading="lazy" style="--lx: 0%; --ly: -3.13%; --lw: 99.5%;" />
+              <img src="assets/images/logo/Gilgamesh.webp" alt="Gilgamesh" class="char-layer char-layer--fg" width="1560" height="1650" loading="lazy" style="--lx: 0%; --ly: -3.13%; --lw: 99.5%;" />
+            </div>
+          </div>
+          <div class="char-slide-scrim" aria-hidden="true"></div>
+
+          <div class="char-caption">
+            <span class="char-badge" data-anim>Imaginary &middot; Kolaborasi Fate</span>
+            <h3 class="char-title" data-anim>
+              <span class="char-title-art" style="--img-w: 2816; --img-h: 1536; --crop-x: 206; --crop-y: 396; --crop-w: 2542; --crop-h: 736;">
+                <img src="assets/images/logo/Gilgamesh Title transparent.webp" alt="Gilgamesh" width="2816" height="1536" loading="lazy" />
+                <span class="char-title-shine" aria-hidden="true" style="-webkit-mask-image: url('assets/images/logo/Gilgamesh%20Title%20transparent.webp'); mask-image: url('assets/images/logo/Gilgamesh%20Title%20transparent.webp');"></span>
+              </span>
+            </h3>
+            <div class="char-stars" data-anim aria-label="Rarity bintang 5">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="char-desc" data-anim>Sang Raja para Pahlawan. Karakter kolaborasi Fate x HSR yang memanggil harta pusaka dari Gate of Babylon.</p>
+          </div>
+        </article>
+
+      </div>
+
+      <button type="button" class="carousel-arrow carousel-arrow--prev" data-prev aria-label="Karakter sebelumnya">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </button>
+      <button type="button" class="carousel-arrow carousel-arrow--next" data-next aria-label="Karakter berikutnya">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </button>
+      <div class="carousel-dots" data-dots></div>
+
+      <!-- Fade atas/bawah supaya warna tema slide menyatu dengan section sekitarnya -->
+      <div class="section-fade section-fade--top" aria-hidden="true"></div>
+      <div class="section-fade section-fade--bottom" aria-hidden="true"></div>
+    </div>
+
+      <!-- Trailer kolaborasi (tampil untuk semua slide).
+           .yt-lite = video "klik-untuk-play": awalnya cuma thumbnail + tombol play,
+           <iframe> YouTube baru dibuat oleh JS setelah diklik (lihat initLiteYouTube). -->
+      <div class="char-trailer">
+        <div class="char-trailer-inner">
+          <div class="char-trailer-text">
+            <span class="video-caption-label">Trailer Kolaborasi</span>
+            <h3 class="char-trailer-title">A Long Awaited Reunion</h3>
+            <p>Honkai: Star Rail &times; Fate/stay night [Unlimited Blade Works]. Tonton trailer kolaborasi yang mempertemukan Rin Tohsaka dan Gilgamesh dengan Astral Express.</p>
+          </div>
+          <div class="video-frame yt-lite" data-yt-id="EX3oBRfMjdA" data-yt-title="Honkai: Star Rail x Fate/stay night [UBW] Collab Trailer - A Long Awaited Reunion">
+            <button type="button" class="yt-lite-btn" aria-label="Putar video: Trailer Kolaborasi Honkai: Star Rail x Fate/stay night [UBW]">
+              <img class="yt-lite-thumb" src="https://img.youtube.com/vi/EX3oBRfMjdA/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy" />
+              <span class="yt-lite-play" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.4-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5z" /></svg>
+                </span>
+              <span class="yt-lite-hint">Watch the Collaboration Trailer</span>
+            </button>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ==================== TRAILER SECTION ==================== -->
-    <section id="news" class="section trailer-section">
+    <!-- ==================== SPECIAL PROGRAM / PREVIEW ====================
+         Tombol thumbnail (role="tab") mengganti isi panel preview.
+         Semua data event ada di atribut data-* tiap tombol, jadi menambah
+         event baru cukup copy satu <button class="preview-thumb">.
+    ==================================================================== -->
+    <section id="events" class="section program-section">
       <div class="section-inner">
-        <h2 class="section-title reveal-up">Official Trailer</h2>
-        <div class="trailer-frame reveal-up">
-          <div class="trailer-frame-corner tl"></div>
-          <div class="trailer-frame-corner tr"></div>
-          <div class="trailer-frame-corner bl"></div>
-          <div class="trailer-frame-corner br"></div>
-          <div class="trailer-video-wrap">
-            <iframe
-              src="https://www.youtube.com/embed/xT88aPknvag"
-              title="Honkai: Star Rail Official Trailer"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen
-              loading="lazy">
-            </iframe>
+        <div class="program-panel reveal-up">
+          <div class="program-panel-deco" aria-hidden="true"></div>
+
+          <header class="program-head">
+            <div>
+              <h2 class="program-title">Special Program</h2>
+              <p class="program-sub"><span class="program-chip">Update Terbaru</span> Event Banner Preview</p>
+            </div>
+            <p class="program-note">Boosted drop-rate untuk karakter unggulan!</p>
+          </header>
+
+          <div class="program-grid">
+
+            <!-- Kiri: panel preview event (banner utuh 16:9 + keterangan di bawahnya) -->
+            <div class="program-preview">
+              <div class="preview-stage" id="previewStage" data-theme="nebula">
+                <div class="preview-content" id="previewContent">
+                  <div class="preview-media">
+                    <img id="previewImg" class="preview-img" src="assets/images/events/event1.webp" alt="Banner Event Warp Phase II" width="1778" height="1000" loading="lazy" />
+                  </div>
+                  <div class="preview-plate">
+                    <span class="preview-phase" id="previewPhase">Event Warp</span>
+                    <h3 class="preview-name" id="previewName">Event Banner Preview</h3>
+                    <span class="preview-tag" id="previewTag">Phase II &middot; Warp Terbatas</span>
+                    <p class="preview-desc" id="previewDesc">Banner warp edisi terbatas dengan drop-rate karakter unggulan yang ditingkatkan.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="preview-thumbs" role="tablist" aria-label="Pilih event">
+                <button type="button" class="preview-thumb is-active" role="tab" aria-selected="true" aria-controls="previewStage"
+                        data-name="Event Banner Preview" data-phase="Event Warp" data-theme="nebula"
+                        data-tag="Phase II · Warp Terbatas"
+                        data-desc="Banner warp edisi terbatas dengan drop-rate karakter unggulan yang ditingkatkan."
+                        data-img="assets/images/events/event1.webp" data-alt="Banner Event Warp Phase II">
+                  <img src="assets/images/events/event1.webp" alt="" loading="lazy" />
+                  <span>Event Warp</span>
+                </button>
+                <button type="button" class="preview-thumb" role="tab" aria-selected="false" aria-controls="previewStage" tabindex="-1"
+                        data-name="Limited-Time Bonus" data-phase="Bonus Kolaborasi" data-theme="fire"
+                        data-tag="Kolaborasi Fate · Light Cone 5★"
+                        data-desc="Gunakan Star Rail Special Pass selama event warp untuk klaim hadiah kolaborasi eksklusif."
+                        data-img="assets/images/events/event2.webp" data-alt="Banner bonus kolaborasi waktu terbatas">
+                  <img src="assets/images/events/event2.webp" alt="" loading="lazy" />
+                  <span>Bonus Terbatas</span>
+                </button>
+                <button type="button" class="preview-thumb" role="tab" aria-selected="false" aria-controls="previewStage" tabindex="-1"
+                        data-name="Log in to Claim" data-phase="Event Login" data-theme="gold"
+                        data-tag="Kolaborasi Fate · Hadiah Gratis"
+                        data-desc="Login selama periode kolaborasi dan pilih satu karakter kolaborasi bintang 5 secara gratis."
+                        data-img="assets/images/events/event3.webp" data-alt="Banner event login kolaborasi">
+                  <img src="assets/images/events/event3.webp" alt="" loading="lazy" />
+                  <span>Login Event</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Kanan: kalender event (gambar statis) -->
+            <div class="program-calendar">
+              <div class="program-photo">
+                <img src="assets/images/events/July.webp" alt="Kalender event Honkai: Star Rail bulan Juli" loading="lazy" />
+              </div>
+              <div class="video-caption">
+                <span class="video-caption-label">Kalender Event Juli</span>
+                <p>Cek jadwal event, banner warp, dan hadiah login yang hadir sepanjang bulan Juli.</p>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -190,55 +382,157 @@
         <h2 class="section-title reveal-up">Gameplay Highlights</h2>
         <p class="section-subtitle reveal-up">Sekilas pengalaman yang menantimu di Honkai: Star Rail</p>
 
-        <div class="gameplay-grid" id="gameplayGrid">
+        <!-- Marquee: 2 grup identik berurutan, track digeser -50% lalu loop
+             (CSS @keyframes gameplay-marquee) sehingga tidak ada lompatan.
+             Grup kedua hanya duplikat visual -> aria-hidden. -->
+        <div class="gameplay-marquee" id="gameplayMarquee">
+          <div class="gameplay-track">
+            <div class="gameplay-group">
+              <div class="gameplay-item">
+                <div class="gameplay-icon" aria-hidden="true">
+                  <span class="gameplay-icon-art" style="-webkit-mask-image: url('assets/images/logo/Turn%20Base%20Icon.webp'); mask-image: url('assets/images/logo/Turn%20Base%20Icon.webp');"></span>
+                </div>
+                <h3 class="gameplay-title">Turn-based Strategic Combat</h3>
+                <p class="gameplay-desc">Susun strategi tiap giliran, manfaatkan kelemahan elemen musuh, dan lancarkan combo mematikan.</p>
+              </div>
 
-          <div class="gameplay-card">
-            <div class="gameplay-icon" aria-hidden="true">
-              <!-- turn-based / chess-like icon -->
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M12 3v18M4 8h16M4 16h16" stroke-linecap="round" />
-                <circle cx="12" cy="12" r="9" />
-              </svg>
+              <div class="gameplay-item">
+                <div class="gameplay-icon" aria-hidden="true">
+                  <span class="gameplay-icon-art" style="-webkit-mask-image: url('assets/images/logo/Planet%20Icon.webp'); mask-image: url('assets/images/logo/Planet%20Icon.webp');"></span>
+                </div>
+                <h3 class="gameplay-title">Eksplorasi Galaksi dan Planet</h3>
+                <p class="gameplay-desc">Jelajahi dunia terbuka penuh rahasia, dari kota futuristik hingga reruntuhan kuno antar bintang.</p>
+              </div>
+
+              <div class="gameplay-item">
+                <div class="gameplay-icon" aria-hidden="true">
+                  <span class="gameplay-icon-art" style="-webkit-mask-image: url('assets/images/logo/Path%20Element%20Icon.webp'); mask-image: url('assets/images/logo/Path%20Element%20Icon.webp');"></span>
+                </div>
+                <h3 class="gameplay-title">Sistem Path dan Elemen</h3>
+                <p class="gameplay-desc">Kombinasikan Path dan Elemen tiap karakter untuk membangun tim dengan gaya bertarung unikmu sendiri.</p>
+              </div>
+
+              <div class="gameplay-item">
+                <div class="gameplay-icon" aria-hidden="true">
+                  <span class="gameplay-icon-art" style="-webkit-mask-image: url('assets/images/logo/Story%20Icon.webp'); mask-image: url('assets/images/logo/Story%20Icon.webp');"></span>
+                </div>
+                <h3 class="gameplay-title">Karakter dengan Cerita Mendalam</h3>
+                <p class="gameplay-desc">Setiap penjelajah membawa kisah, motivasi, dan hubungan antar karakter yang kaya dan emosional.</p>
+              </div>
             </div>
-            <h3 class="gameplay-title">Turn-based Strategic Combat</h3>
-            <p class="gameplay-desc">Susun strategi tiap giliran, manfaatkan kelemahan elemen musuh, dan lancarkan combo mematikan.</p>
-          </div>
+            <div class="gameplay-group" aria-hidden="true">
+              <div class="gameplay-item">
+                <div class="gameplay-icon" aria-hidden="true">
+                  <span class="gameplay-icon-art" style="-webkit-mask-image: url('assets/images/logo/Turn%20Base%20Icon.webp'); mask-image: url('assets/images/logo/Turn%20Base%20Icon.webp');"></span>
+                </div>
+                <h3 class="gameplay-title">Turn-based Strategic Combat</h3>
+                <p class="gameplay-desc">Susun strategi tiap giliran, manfaatkan kelemahan elemen musuh, dan lancarkan combo mematikan.</p>
+              </div>
 
-          <div class="gameplay-card">
-            <div class="gameplay-icon" aria-hidden="true">
-              <!-- galaxy / planet icon -->
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <circle cx="12" cy="12" r="4" />
-                <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)" />
-              </svg>
+              <div class="gameplay-item">
+                <div class="gameplay-icon" aria-hidden="true">
+                  <span class="gameplay-icon-art" style="-webkit-mask-image: url('assets/images/logo/Planet%20Icon.webp'); mask-image: url('assets/images/logo/Planet%20Icon.webp');"></span>
+                </div>
+                <h3 class="gameplay-title">Eksplorasi Galaksi dan Planet</h3>
+                <p class="gameplay-desc">Jelajahi dunia terbuka penuh rahasia, dari kota futuristik hingga reruntuhan kuno antar bintang.</p>
+              </div>
+
+              <div class="gameplay-item">
+                <div class="gameplay-icon" aria-hidden="true">
+                  <span class="gameplay-icon-art" style="-webkit-mask-image: url('assets/images/logo/Path%20Element%20Icon.webp'); mask-image: url('assets/images/logo/Path%20Element%20Icon.webp');"></span>
+                </div>
+                <h3 class="gameplay-title">Sistem Path dan Elemen</h3>
+                <p class="gameplay-desc">Kombinasikan Path dan Elemen tiap karakter untuk membangun tim dengan gaya bertarung unikmu sendiri.</p>
+              </div>
+
+              <div class="gameplay-item">
+                <div class="gameplay-icon" aria-hidden="true">
+                  <span class="gameplay-icon-art" style="-webkit-mask-image: url('assets/images/logo/Story%20Icon.webp'); mask-image: url('assets/images/logo/Story%20Icon.webp');"></span>
+                </div>
+                <h3 class="gameplay-title">Karakter dengan Cerita Mendalam</h3>
+                <p class="gameplay-desc">Setiap penjelajah membawa kisah, motivasi, dan hubungan antar karakter yang kaya dan emosional.</p>
+              </div>
             </div>
-            <h3 class="gameplay-title">Eksplorasi Galaksi dan Planet</h3>
-            <p class="gameplay-desc">Jelajahi dunia terbuka penuh rahasia, dari kota futuristik hingga reruntuhan kuno antar bintang.</p>
           </div>
+        </div>
 
-          <div class="gameplay-card">
-            <div class="gameplay-icon" aria-hidden="true">
-              <!-- path/element sparkle icon -->
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M12 2l2.2 6.8H21l-5.6 4.1 2.2 6.8L12 15.6l-5.6 4.1 2.2-6.8L3 8.8h6.8z" stroke-linejoin="round" />
-              </svg>
-            </div>
-            <h3 class="gameplay-title">Sistem Path dan Elemen</h3>
-            <p class="gameplay-desc">Kombinasikan Path dan Elemen tiap karakter untuk membangun tim dengan gaya bertarung unikmu sendiri.</p>
+        <!-- Video gameplay: 5 card klik-untuk-play (lihat initLiteYouTube &
+             initGameplayVideos di main.js). Card .is-featured tampil lebih besar;
+             card yang diputar otomatis jadi featured & membesar selebar baris
+             (.is-playing). Panah .gv-arrow: pindah featured / video berikutnya.
+             Thumbnail diambil langsung
+             dari YouTube berdasarkan data-yt-id.
+             Tambah video: copy satu <li class="gv-card">, ganti ID & judul. -->
+        <div class="gameplay-trailer">
+          <div class="gv-stage">
+          <button type="button" class="carousel-arrow carousel-arrow--prev gv-arrow" data-gv-step="-1" aria-label="Video sebelumnya">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </button>
+          <ul class="gv-row" id="gameplayVideos" aria-label="Video gameplay">
+            <li class="gv-card">
+              <div class="video-frame yt-lite" data-yt-id="bR6YgYRmqkc" data-yt-title="4.4 is HERE! Himeko Nova x Astral Express | HSR 4.4v1">
+                <button type="button" class="yt-lite-btn" aria-label="Putar video: Himeko Nova x Astral Express">
+                  <img class="yt-lite-thumb" src="https://img.youtube.com/vi/bR6YgYRmqkc/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy" />
+                  <span class="yt-lite-play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.4-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5z" /></svg>
+                  </span>
+                </button>
+              </div>
+              <p class="gv-title">Himeko Nova x Astral Express</p>
+            </li>
+            <li class="gv-card is-featured">
+              <div class="video-frame yt-lite" data-yt-id="MRuVPvjzErk" data-yt-title="Ultimate Hypercarry Gilgamesh Showcase in 10 Modes! | HSR 4.4v1">
+                <button type="button" class="yt-lite-btn" aria-label="Putar video: Gilgamesh Showcase 10 Mode">
+                  <img class="yt-lite-thumb" src="https://img.youtube.com/vi/MRuVPvjzErk/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy" />
+                  <span class="yt-lite-play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.4-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5z" /></svg>
+                  </span>
+                </button>
+              </div>
+              <p class="gv-title">Gilgamesh Showcase 10 Mode</p>
+            </li>
+            <li class="gv-card">
+              <div class="video-frame yt-lite" data-yt-id="M4X_as_Prt0" data-yt-title="4.4 is HERE! E0S0 Tohsaka Rin x E0S0 Archer | HSR 4.4v1">
+                <button type="button" class="yt-lite-btn" aria-label="Putar video: Rin Tohsaka x Archer">
+                  <img class="yt-lite-thumb" src="https://img.youtube.com/vi/M4X_as_Prt0/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy" />
+                  <span class="yt-lite-play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.4-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5z" /></svg>
+                  </span>
+                </button>
+              </div>
+              <p class="gv-title">Rin Tohsaka x Archer</p>
+            </li>
+            <li class="gv-card">
+              <div class="video-frame yt-lite" data-yt-id="J6q6cJtMHNs" data-yt-title="V3 is HERE! E0S0 Pearl x SW 999 0-cycle 4.6 AA | HSR 4.6v3">
+                <button type="button" class="yt-lite-btn" aria-label="Putar video: Pearl x SW 0-Cycle">
+                  <img class="yt-lite-thumb" src="https://img.youtube.com/vi/J6q6cJtMHNs/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy" />
+                  <span class="yt-lite-play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.4-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5z" /></svg>
+                  </span>
+                </button>
+              </div>
+              <p class="gv-title">Pearl x SW 0-Cycle</p>
+            </li>
+            <li class="gv-card">
+              <div class="video-frame yt-lite" data-yt-id="K41kCCGlMak" data-yt-title="4.3 is HERE! E0S1 Mortenax x E0S1 Ashveil 0-cycle new MoC! | 4.3 MoC">
+                <button type="button" class="yt-lite-btn" aria-label="Putar video: Mortenax x Ashveil MoC">
+                  <img class="yt-lite-thumb" src="https://img.youtube.com/vi/K41kCCGlMak/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy" />
+                  <span class="yt-lite-play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.4-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5z" /></svg>
+                  </span>
+                </button>
+              </div>
+              <p class="gv-title">Mortenax x Ashveil MoC</p>
+            </li>
+          </ul>
+          <button type="button" class="carousel-arrow carousel-arrow--next gv-arrow" data-gv-step="1" aria-label="Video berikutnya">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </button>
           </div>
-
-          <div class="gameplay-card">
-            <div class="gameplay-icon" aria-hidden="true">
-              <!-- story/book icon -->
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15.5a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 0 4 22V5.5z" stroke-linejoin="round" />
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke-linecap="round" />
-              </svg>
-            </div>
-            <h3 class="gameplay-title">Karakter dengan Cerita Mendalam</h3>
-            <p class="gameplay-desc">Setiap penjelajah membawa kisah, motivasi, dan hubungan antar karakter yang kaya dan emosional.</p>
+          <div class="video-caption">
+            <span class="video-caption-label">Lihat Gameplay Secara Langsung</span>
+            <p>Showcase gameplay patch 4.3&ndash;4.6 oleh ubworks &mdash; klik salah satu video untuk memutarnya langsung di sini.</p>
           </div>
-
         </div>
       </div>
     </section>
@@ -248,7 +542,38 @@
       <div class="section-inner download-inner reveal-up">
         <h2 class="section-title">Siap Memulai Perjalanan?</h2>
         <p class="section-subtitle">Unduh Honkai: Star Rail sekarang dan mulai jelajahi galaksi.</p>
-        <a href="#" class="btn btn-primary btn-lg">Download Now</a>
+
+        <!-- Tombol per platform -> halaman toko resmi (tab baru). PC = Epic Games Store.
+             Ikon = SVG inline sederhana, warna ikut currentColor/aksen situs. -->
+        <ul class="platform-list" aria-label="Pilih platform">
+          <li>
+            <a href="https://apps.apple.com/us/app/honkai-star-rail/id1599719154" class="platform-btn" target="_blank" rel="noopener noreferrer">
+              <svg class="platform-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.2 1.8-3.26 1.88-3.31-1.03-1.5-2.62-1.7-3.18-1.73-1.35-.14-2.64.8-3.33.8-.69 0-1.74-.78-2.87-.76-1.47.02-2.83.86-3.59 2.18-1.54 2.67-.39 6.61 1.1 8.77.73 1.06 1.6 2.24 2.73 2.2 1.1-.04 1.51-.71 2.84-.71 1.32 0 1.7.71 2.86.69 1.18-.02 1.93-1.07 2.65-2.13.84-1.22 1.18-2.41 1.2-2.47-.03-.01-2.3-.88-2.32-3.5zM14.2 6.13c.6-.73 1.01-1.74.9-2.75-.87.04-1.92.58-2.54 1.3-.56.64-1.05 1.67-.92 2.66.97.08 1.96-.49 2.56-1.21z" /></svg>
+              <span class="platform-text"><small>Download on the</small><strong>App Store</strong></span>
+            </a>
+          </li>
+          <li>
+            <a href="https://play.google.com/store/apps/details?id=com.HoYoverse.hkrpgoversea" class="platform-btn" target="_blank" rel="noopener noreferrer">
+              <svg class="platform-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <defs><linearGradient id="playGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee" /><stop offset="0.55" stop-color="#8b5cf6" /><stop offset="1" stop-color="#f0abfc" /></linearGradient></defs>
+                <path d="M5 3.2c0-.8.86-1.3 1.56-.9l13.2 7.9c.66.4.66 1.4 0 1.8L6.56 21.7C5.86 22.1 5 21.6 5 20.8z" fill="url(#playGrad)" />
+              </svg>
+              <span class="platform-text"><small>Get it on</small><strong>Google Play</strong></span>
+            </a>
+          </li>
+          <li>
+            <a href="https://store.epicgames.com/p/honkai-star-rail" class="platform-btn" target="_blank" rel="noopener noreferrer">
+              <svg class="platform-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.3l7.2-1v7.1H3zM11.2 4.2L21 2.8v8.6h-9.8zM3 12.5h7.2v7.1L3 18.6zM11.2 12.5H21v8.6l-9.8-1.3z" /></svg>
+              <span class="platform-text"><small>Download for</small><strong>Windows PC</strong></span>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.playstation.com/en-id/games/honkai-star-rail/" class="platform-btn" target="_blank" rel="noopener noreferrer">
+              <svg class="platform-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7.5h10a4 4 0 0 1 3.9 3.1l1.1 5a2.6 2.6 0 0 1-4.4 2.4l-2-2.1a2 2 0 0 0-1.4-.6H9.8a2 2 0 0 0-1.4.6l-2 2.1A2.6 2.6 0 0 1 2 15.6l1.1-5A4 4 0 0 1 7 7.5z" /><path d="M7.5 10.5v3M6 12h3" /><circle cx="15.5" cy="11" r=".6" fill="currentColor" /><circle cx="17.5" cy="13" r=".6" fill="currentColor" /></svg>
+              <span class="platform-text"><small>Available on</small><strong>PlayStation 5</strong></span>
+            </a>
+          </li>
+        </ul>
       </div>
     </section>
 
@@ -258,14 +583,13 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-top">
-        <div class="footer-brand">
-          <span class="footer-logo">HONKAI: STAR RAIL</span>
-          <p class="footer-team">Fan Page dibuat oleh Astral Express Web Team</p>
-        </div>
+        <a href="#home" class="footer-logo">HONKAI<span>: STAR RAIL</span></a>
 
         <div class="footer-social">
           <a href="#" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">Instagram</a>
           <a href="#" class="social-link" aria-label="YouTube" target="_blank" rel="noopener">YouTube</a>
+          <a href="#" class="social-link" aria-label="X / Twitter" target="_blank" rel="noopener">X</a>
+          <a href="#" class="social-link" aria-label="Discord" target="_blank" rel="noopener">Discord</a>
         </div>
       </div>
 
@@ -277,6 +601,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js"></script>
+  <script src="js/particles.js?v=20261001"></script>
+  <script src="js/main.js?v=20261001"></script>
 </body>
 </html>

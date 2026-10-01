@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event | Honkai: Star Rail</title>
+  <meta name="description" content="Daftar event terbaru Honkai: Star Rail - event warp, bonus kolaborasi, dan hadiah login. Fan-made." />
+
+  <!-- Google Fonts: Orbitron (display/futuristik) + Rajdhani (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Extend Tailwind dengan warna & font custom biar konsisten sama CSS variables di style.css
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            space: {
+              deep: '#05060f',
+              alt: '#0a0e1f',
+              card: '#10132a',
+            },
+            fire: '#ff6b45',
+            ice: '#3fd0f0',
+            gold: '#f7c948',
+            nebula: '#8b5cf6',
+          },
+          fontFamily: {
+            display: ['Orbitron', 'sans-serif'],
+            body: ['Rajdhani', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- GSAP + ScrollTrigger (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <link rel="stylesheet" href="css/style.css?v=20261001" />
+</head>
+<body class="bg-space-deep text-slate-200 font-body overflow-x-hidden">
+
+  <!-- ==================== LOADING SCREEN ==================== -->
+  <div id="loader" class="loader">
+    <div class="loader-logo">
+      <img src="assets/images/logo/HSR_Logo.webp" alt="Honkai: Star Rail" width="690" height="542" fetchpriority="high" />
+      <span class="loader-shine" aria-hidden="true"></span>
+    </div>
+    <div class="loader-bar"><span></span></div>
+  </div>
+
+  <!-- ==================== NAVBAR ====================
+       Sama dengan index.html; link section mengarah balik ke landing page,
+       "Event" = halaman ini. Navbar langsung solid (.is-scrolled) karena
+       halaman ini tidak punya hero transparan. -->
+  <header id="navbar" class="navbar is-scrolled">
+    <nav class="navbar-inner">
+
+      <ul class="navbar-links" id="navLinks">
+        <li><a href="index.html#home" class="nav-link">Home</a></li>
+        <li><a href="character.html" class="nav-link">Character</a></li>
+        <li><a href="events.html" class="nav-link is-current" aria-current="page">Event</a></li>
+        <li><a href="index.html#gameplay" class="nav-link">Gameplay</a></li>
+        <li><a href="index.html#download" class="nav-link nav-link--cta">Download</a></li>
+      </ul>
+
+      <button type="button" id="hamburger" class="hamburger" aria-label="Buka menu navigasi" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ==================== EVENT LIST ====================
+         Feed event sederhana: satu event per baris (thumbnail kiri, judul +
+         deskripsi kanan, tanggal di pojok kanan bawah), urut terbaru dulu.
+         3 entri pertama = event Special Program di index.html.
+         Tambah event: copy satu <li> di dalam .event-feed, ganti isinya, dan
+         tambahkan datanya di js/events-data.js (id sama dengan ?id= di link).
+         Tiap kartu menautkan ke halaman detail event.html?id=<id>.
+         Awalnya hanya 5 event pertama yang tampil (EVENT_FEED_INITIAL di main.js). -->
+    <section id="event-list" class="section events-page">
+      <div class="section-inner events-inner">
+        <header class="events-head">
+          <span class="section-kicker">Special Program</span>
+          <h1 class="section-title">Event &amp; Berita</h1>
+          <p class="section-subtitle">Event terbaru, hadiah kolaborasi, dan pengumuman seputar Astral Express.</p>
+        </header>
+
+        <ol class="event-feed" id="eventFeed">
+          <li>
+            <a class="event-row-link" href="event.html?id=fase-2-event-warp">
+              <article class="event-row">
+                <div class="event-row-thumb">
+                  <img src="assets/images/events/event1.webp" alt="Banner Fase II Event Warp &quot;In Ravages Does the Whistle Sound&quot;" loading="lazy" />
+                </div>
+                <div class="event-row-body">
+                  <span class="event-row-label">Event Warp</span>
+                  <h2 class="event-row-title">Fase II Event Warp: "In Ravages Does the Whistle Sound"</h2>
+                  <p class="event-row-desc">Banner warp edisi terbatas Fase II resmi dibuka, menghadirkan tiga karakter unggulan dengan drop-rate yang ditingkatkan selama periode Warp Terbatas.</p>
+                  <time class="event-row-date" datetime="2026-09-24">24 Sep 2026</time>
+                </div>
+              </article>
+            </a>
+          </li>
+          <li>
+            <a class="event-row-link" href="event.html?id=limited-time-bonus">
+              <article class="event-row">
+                <div class="event-row-thumb">
+                  <img src="assets/images/events/event2.webp" alt="Banner Limited-Time Bonus: Light Cone kolaborasi bintang 5" loading="lazy" />
+                </div>
+                <div class="event-row-body">
+                  <span class="event-row-label">Bonus Kolaborasi</span>
+                  <h2 class="event-row-title">Limited-Time Bonus!</h2>
+                  <p class="event-row-desc">Selama periode Warp Version 4.4, gunakan hingga 200 Star Rail Special Pass untuk klaim 1 Light Cone kolaborasi bintang 5 pilihan: "I Am As You Behold" atau "The Hell Where Ideals Burn".</p>
+                  <time class="event-row-date" datetime="2026-09-24">24 Sep 2026</time>
+                </div>
+              </article>
+            </a>
+          </li>
+          <li>
+            <a class="event-row-link" href="event.html?id=log-in-to-claim">
+              <article class="event-row">
+                <div class="event-row-thumb">
+                  <img src="assets/images/events/event3.webp" alt="Banner Log in to Claim: pilih Gilgamesh atau Archer" loading="lazy" />
+                </div>
+                <div class="event-row-body">
+                  <span class="event-row-label">Event Login</span>
+                  <h2 class="event-row-title">Log in to Claim!</h2>
+                  <p class="event-row-desc">Login selama periode kolaborasi dan pilih gratis satu karakter kolaborasi bintang 5: Gilgamesh (Destruction · Lightning) atau Archer (The Hunt · Quantum).</p>
+                  <time class="event-row-date" datetime="2026-09-24">24 Sep 2026</time>
+                </div>
+              </article>
+            </a>
+          </li>
+          <!-- Entri 4, 6, 7, 8, 10: judul/teks tebakan dari visual banner -->
+          <li>
+            <a class="event-row-link" href="event.html?id=sorotan-cerita-sang-navigator">
+              <article class="event-row">
+                <div class="event-row-thumb">
+                  <img src="assets/images/events/event4.webp" alt="Key visual Sorotan Cerita: Sang Navigator" loading="lazy" />
+                </div>
+                <div class="event-row-body">
+                  <span class="event-row-label">Cerita</span>
+                  <h2 class="event-row-title">Sorotan Cerita: Sang Navigator</h2>
+                  <p class="event-row-desc">Sebuah momen sunyi di tengah perjalanan Astral Express — telusuri kembali kisah karakter melalui potongan cerita baru yang penuh emosi.</p>
+                  <time class="event-row-date" datetime="2026-09-20">20 Sep 2026</time>
+                </div>
+              </article>
+            </a>
+          </li>
+          <li>
+            <a class="event-row-link" href="event.html?id=charmony-festival-invitation">
+              <article class="event-row">
+                <div class="event-row-thumb">
+                  <img src="assets/images/events/event5.webp" alt="Banner Charmony Festival: Festival Invitation" loading="lazy" />
+                </div>
+                <div class="event-row-body">
+                  <span class="event-row-label">Event Web</span>
+                  <h2 class="event-row-title">Charmony Festival: Festival Invitation Kembali!</h2>
+                  <p class="event-row-desc">Event web "Festival Invitation" resmi kembali digelar di Penacony! Ikuti rangkaian misi festival dan raih hingga 540 Stellar Jade secara gratis.</p>
+                  <time class="event-row-date" datetime="2026-09-22">22 Sep 2026</time>
+                </div>
+              </article>
+            </a>
+          </li>
+          <li>
+            <a class="event-row-link" href="event.html?id=bayang-di-tengah-hujan">
+              <article class="event-row">
+                <div class="event-row-thumb">
+                  <img src="assets/images/events/event6.webp" alt="Key visual Bayang di Tengah Hujan" loading="lazy" />
+                </div>
+                <div class="event-row-body">
+                  <span class="event-row-label">Cerita</span>
+                  <h2 class="event-row-title">Bayang di Tengah Hujan</h2>
+                  <p class="event-row-desc">Sebuah babak cerita baru yang lebih kelam menanti — ikuti alur kisah penuh emosi ini saat rahasia lama mulai terungkap.</p>
+                  <time class="event-row-date" datetime="2026-09-12">12 Sep 2026</time>
+                </div>
+              </article>
+            </a>
+          </li>
+          <li>
+            <a class="event-row-link" href="event.html?id=sinyal-yang-terputus">
+              <article class="event-row">
+                <div class="event-row-thumb">
+                  <img src="assets/images/events/event7.webp" alt="Key visual Sinyal yang Terputus" loading="lazy" />
+                </div>
+                <div class="event-row-body">
+                  <span class="event-row-label">Misteri</span>
+                  <h2 class="event-row-title">Sinyal yang Terputus</h2>
+                  <p class="event-row-desc">Sesuatu yang tak beres tersembunyi di balik data yang rusak — investigasi babak misteri terbaru dan ungkap kebenarannya.</p>
+                  <time class="event-row-date" datetime="2026-09-08">8 Sep 2026</time>
+                </div>
+              </article>
+            </a>
+          </li>
+          <li>
+            <a class="event-row-link" href="event.html?id=sorotan-karakter-baru">
+              <article class="event-row">
+                <div class="event-row-thumb">
+                  <img src="assets/images/events/event8.webp" alt="Key visual Sorotan Karakter Baru" loading="lazy" />
+                </div>
+                <div class="event-row-body">
+                  <span class="event-row-label">Karakter</span>
+                  <h2 class="event-row-title">Sorotan Karakter Baru</h2>
+                  <p class="event-row-desc">Kenali karakter terbaru yang akan segera bergabung dengan Astral Express — intip gaya bertarung dan kepribadiannya sebelum banner-nya dibuka.</p>
+                  <time class="event-row-date" datetime="2026-09-01">1 Sep 2026</time>
+                </div>
+              </article>
+            </a>
+          </li>
+          <li>
+            <a class="event-row-link" href="event.html?id=boys-dorm-merch">
+              <article class="event-row">
+                <div class="event-row-thumb">
+                  <img src="assets/images/events/event9.webp" alt="Banner Official Merch Release seri Boys&#x27; Dorm" loading="lazy" />
+                </div>
+                <div class="event-row-body">
+                  <span class="event-row-label">Merchandise</span>
+                  <h2 class="event-row-title">Official Merch Release: Boys' Dorm Series Sudah Tersedia!</h2>
+                  <p class="event-row-desc">Chibi blind box dan plush merch seri Boys' Dorm resmi rilis di Amazon, menampilkan Jing Yuan, Dan Heng, Blade, Sunday, Argenti, Dr. Ratio, Aventurine, dan Boothill — plus edisi spesial "Secret Dan Heng · Imbibitor Lunae" dan "Secret Aventurine".</p>
+                  <time class="event-row-date" datetime="2026-09-15">15 Sep 2026</time>
+                </div>
+              </article>
+            </a>
+          </li>
+          <li>
+            <a class="event-row-link" href="event.html?id=sang-ksatria-api">
+              <article class="event-row">
+                <div class="event-row-thumb">
+                  <img src="assets/images/events/event10.webp" alt="Key visual Sang Ksatria Api" loading="lazy" />
+                </div>
+                <div class="event-row-body">
+                  <span class="event-row-label">Karakter</span>
+                  <h2 class="event-row-title">Sang Ksatria Api</h2>
+                  <p class="event-row-desc">Sosok baru dengan kekuatan api yang membara mulai menampakkan diri — nantikan detail lengkap kemampuan dan cerita di baliknya.</p>
+                  <time class="event-row-date" datetime="2026-08-20">20 Agu 2026</time>
+                </div>
+              </article>
+            </a>
+          </li>
+        </ol>
+
+        <!-- Tombol "Lihat Selengkapnya": disembunyikan (hidden) sampai JS
+             memotong feed ke 5 event pertama (lihat initEventFeed di main.js).
+             Tanpa JS semua event langsung tampil. -->
+        <div class="event-feed-more">
+          <button type="button" class="btn btn-outline" id="eventFeedMore" aria-controls="eventFeed" hidden>Lihat Selengkapnya</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <a href="index.html#home" class="footer-logo">HONKAI<span>: STAR RAIL</span></a>
+
+        <div class="footer-social">
+          <a href="#" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">Instagram</a>
+          <a href="#" class="social-link" aria-label="YouTube" target="_blank" rel="noopener">YouTube</a>
+          <a href="#" class="social-link" aria-label="X / Twitter" target="_blank" rel="noopener">X</a>
+          <a href="#" class="social-link" aria-label="Discord" target="_blank" rel="noopener">Discord</a>
+        </div>
+      </div>
+
+      <hr class="footer-divider" />
+
+      <p class="footer-copyright">
+        &copy; All rights reserved by miHoYo / HoYoverse. Other properties and any right, title, and interest thereof and therein (intellectual property rights included) not derived from Honkai: Star Rail belong to their respective owners. This is a non-commercial fan-made project created for a web development competition.
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/particles.js?v=20261001"></script>
+  <script src="js/main.js?v=20261001"></script>
+</body>
+</html>

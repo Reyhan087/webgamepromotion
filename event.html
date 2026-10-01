@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event &amp; Berita | Honkai: Star Rail</title>
+  <meta name="description" content="Detail event Honkai: Star Rail. Fan-made." />
+
+  <!-- Google Fonts: Orbitron (display/futuristik) + Rajdhani (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Extend Tailwind dengan warna & font custom biar konsisten sama CSS variables di style.css
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            space: {
+              deep: '#05060f',
+              alt: '#0a0e1f',
+              card: '#10132a',
+            },
+            fire: '#ff6b45',
+            ice: '#3fd0f0',
+            gold: '#f7c948',
+            nebula: '#8b5cf6',
+          },
+          fontFamily: {
+            display: ['Orbitron', 'sans-serif'],
+            body: ['Rajdhani', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- GSAP + ScrollTrigger (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <link rel="stylesheet" href="css/style.css?v=20261001" />
+</head>
+<body class="bg-space-deep text-slate-200 font-body overflow-x-hidden">
+
+  <!-- ==================== LOADING SCREEN ==================== -->
+  <div id="loader" class="loader">
+    <div class="loader-logo">
+      <img src="assets/images/logo/HSR_Logo.webp" alt="Honkai: Star Rail" width="690" height="542" fetchpriority="high" />
+      <span class="loader-shine" aria-hidden="true"></span>
+    </div>
+    <div class="loader-bar"><span></span></div>
+  </div>
+
+  <!-- ==================== NAVBAR ====================
+       Sama dengan index.html; link section mengarah balik ke landing page,
+       "Event" = bagian ini (detail event). Navbar langsung solid (.is-scrolled) karena
+       halaman ini tidak punya hero transparan. -->
+  <header id="navbar" class="navbar is-scrolled">
+    <nav class="navbar-inner">
+
+      <ul class="navbar-links" id="navLinks">
+        <li><a href="index.html#home" class="nav-link">Home</a></li>
+        <li><a href="character.html" class="nav-link">Character</a></li>
+        <li><a href="events.html" class="nav-link is-current">Event</a></li>
+        <li><a href="index.html#gameplay" class="nav-link">Gameplay</a></li>
+        <li><a href="index.html#download" class="nav-link nav-link--cta">Download</a></li>
+      </ul>
+
+      <button type="button" id="hamburger" class="hamburger" aria-label="Buka menu navigasi" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ==================== DETAIL EVENT ====================
+         Template tunggal untuk semua event: event.html?id=<id>.
+         Isi artikel & daftar "Berita Lainnya" diisi initEventDetail (main.js)
+         dari data di js/events-data.js. -->
+    <section id="event-detail" class="section events-page ed-section">
+      <div class="section-inner ed-inner">
+        <a href="events.html" class="ed-back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          Kembali ke Event &amp; Berita
+        </a>
+
+        <div class="ed-layout">
+          <article class="ed-article" id="edArticle">
+            <header class="ed-head">
+              <span class="event-row-label" id="edLabel" hidden></span>
+              <h1 class="ed-title" id="edTitle">Memuat event&hellip;</h1>
+              <time class="ed-date" id="edDate"></time>
+            </header>
+
+            <div class="ed-hero" id="edHero" hidden>
+              <img id="edImg" src="" alt="" width="1778" height="1000" />
+            </div>
+
+            <dl class="ed-info" id="edInfo" hidden></dl>
+
+            <div class="ed-body" id="edBody">
+              <noscript><p>Halaman ini membutuhkan JavaScript. Lihat daftar lengkap di <a href="events.html">Event &amp; Berita</a>.</p></noscript>
+            </div>
+
+            <a href="events.html" class="btn btn-outline ed-back-btn">Kembali ke Event &amp; Berita</a>
+          </article>
+
+          <aside class="ed-aside" aria-labelledby="edAsideTitle">
+            <h2 class="ed-aside-title" id="edAsideTitle">Berita Lainnya</h2>
+            <ul class="ed-news" id="edNews"></ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <a href="index.html#home" class="footer-logo">HONKAI<span>: STAR RAIL</span></a>
+
+        <div class="footer-social">
+          <a href="#" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">Instagram</a>
+          <a href="#" class="social-link" aria-label="YouTube" target="_blank" rel="noopener">YouTube</a>
+          <a href="#" class="social-link" aria-label="X / Twitter" target="_blank" rel="noopener">X</a>
+          <a href="#" class="social-link" aria-label="Discord" target="_blank" rel="noopener">Discord</a>
+        </div>
+      </div>
+
+      <hr class="footer-divider" />
+
+      <p class="footer-copyright">
+        &copy; All rights reserved by miHoYo / HoYoverse. Other properties and any right, title, and interest thereof and therein (intellectual property rights included) not derived from Honkai: Star Rail belong to their respective owners. This is a non-commercial fan-made project created for a web development competition.
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/particles.js?v=20261001"></script>
+  <script src="js/events-data.js?v=20261001"></script>
+  <script src="js/main.js?v=20261001"></script>
+</body>
+</html>

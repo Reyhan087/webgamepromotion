@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Karakter | Honkai: Star Rail</title>
+  <meta name="description" content="Arsip karakter Honkai: Star Rail - Astral Express dan kolaborasi Fate. Fan-made." />
+
+  <!-- Google Fonts: Orbitron (display/futuristik) + Rajdhani (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Extend Tailwind dengan warna & font custom biar konsisten sama CSS variables di style.css
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            space: {
+              deep: '#05060f',
+              alt: '#0a0e1f',
+              card: '#10132a',
+            },
+            fire: '#ff6b45',
+            ice: '#3fd0f0',
+            gold: '#f7c948',
+            nebula: '#8b5cf6',
+          },
+          fontFamily: {
+            display: ['Orbitron', 'sans-serif'],
+            body: ['Rajdhani', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- GSAP + ScrollTrigger (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <link rel="stylesheet" href="css/style.css?v=20261001" />
+</head>
+<body class="bg-space-deep text-slate-200 font-body overflow-x-hidden">
+
+  <!-- ==================== LOADING SCREEN ==================== -->
+  <div id="loader" class="loader">
+    <div class="loader-logo">
+      <img src="assets/images/logo/HSR_Logo.webp" alt="Honkai: Star Rail" width="690" height="542" fetchpriority="high" />
+      <span class="loader-shine" aria-hidden="true"></span>
+    </div>
+    <div class="loader-bar"><span></span></div>
+  </div>
+
+  <!-- ==================== NAVBAR ====================
+       Sama dengan index.html; link section mengarah balik ke landing page,
+       "Character" = halaman ini. Navbar langsung solid (.is-scrolled) karena
+       halaman ini tidak punya hero transparan. -->
+  <header id="navbar" class="navbar is-scrolled">
+    <nav class="navbar-inner">
+
+      <ul class="navbar-links" id="navLinks">
+        <li><a href="index.html#home" class="nav-link">Home</a></li>
+        <li><a href="character.html" class="nav-link is-current" aria-current="page">Character</a></li>
+        <li><a href="events.html" class="nav-link">Event</a></li>
+        <li><a href="index.html#gameplay" class="nav-link">Gameplay</a></li>
+        <li><a href="index.html#download" class="nav-link nav-link--cta">Download</a></li>
+      </ul>
+
+      <button type="button" id="hamburger" class="hamburger" aria-label="Buka menu navigasi" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ==================== CHARACTER ARCHIVE ====================
+         Layout: sidebar kelompok (kiri) + panel karakter besar (kanan)
+         + filmstrip thumbnail di bawahnya. Logika di initCharacterPage (main.js).
+         - Tambah kelompok: copy satu <li> di .cp-factions, beri data-faction unik.
+         - Tambah karakter: copy satu <li> di .cp-film-track, isi data-* nya
+           (data-faction = kelompok, data-theme = fire|ice|gold,
+           --fx/--fy = posisi wajah untuk crop thumbnail,
+           data-body-x = posisi horizontal tubuh di gambar untuk panel besar,
+           data-art-y  = opsional, geser art ke bawah bila gambar punya ruang
+           kosong transparan di bagian bawah,
+           data-character = id unik untuk aturan CSS khusus karakter).
+         Panel besar di bawah sudah berisi karakter pertama (tampil tanpa JS). -->
+    <section id="character-page" class="section cp-section">
+      <div class="section-inner cp-inner">
+        <div class="cp-layout">
+          <nav class="cp-factions" aria-label="Kelompok karakter">
+            <ol class="cp-faction-list">
+              <li>
+                <button type="button" class="cp-faction is-active" data-faction="astral-express" aria-pressed="true">
+                  <span class="cp-faction-icon" aria-hidden="true"><img src="assets/images/logo/theastralexpres.webp" alt="" width="1254" height="1254" /></span>
+                  <span class="cp-faction-name">The Astral Express</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="cp-faction" data-faction="fate" aria-pressed="false">
+                  <span class="cp-faction-icon" aria-hidden="true"><img src="assets/images/logo/fatecolab.webp" alt="" width="1254" height="1254" /></span>
+                  <span class="cp-faction-name">Fate Collaboration</span>
+                </button>
+              </li>
+            </ol>
+          </nav>
+
+          <div class="cp-main">
+            <!-- Label halaman kecil tepat di atas sudut kiri-atas panel -->
+            <h1 class="section-kicker cp-page-label">Karakter</h1>
+            <article class="cp-stage" id="cpStage" data-character="himeko" data-theme="fire" style="--body-x: 40%; --art-y: 10%;" aria-live="polite">
+              <img class="cp-stage-img" id="cpImg" src="assets/images/heroes/himeko.webp" alt="Himeko Nova" width="2048" height="2048" />
+              <div class="cp-stage-info" id="cpInfo">
+                <span class="cp-stage-faction" id="cpFaction">The Astral Express</span>
+                <span class="char-badge" id="cpBadge">Fire &middot; Erudition</span>
+                <!-- Nama = grafis judul; src/crop/mask diganti JS saat pindah karakter -->
+                <h2 class="char-title cp-title" id="cpName">
+                  <span class="char-title-art" style="--img-w: 1980; --img-h: 1080; --crop-x: 33; --crop-y: 217; --crop-w: 1905; --crop-h: 607;">
+                    <img src="assets/images/logo/Himekonova title.webp" alt="Himeko Nova" width="1980" height="1080" />
+                    <span class="char-title-shine" aria-hidden="true" style="-webkit-mask-image: url('assets/images/logo/Himekonova%20title.webp'); mask-image: url('assets/images/logo/Himekonova%20title.webp');"></span>
+                  </span>
+                </h2>
+                <div class="char-stars" aria-label="Rarity bintang 5">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <div class="cp-bio">
+                  <h3 class="cp-bio-title">Profil</h3>
+                  <p id="cpDesc">Navigator Astral Express yang elegan dan berani. Serangan api berskala luas untuk membakar seluruh barisan musuh.</p>
+                </div>
+              </div>
+            </article>
+
+            <div class="cp-film">
+              <button type="button" class="cp-film-arrow" data-step="-1" aria-label="Karakter sebelumnya">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </button>
+              <ul class="cp-film-track" id="cpFilm" aria-label="Pilih karakter">
+              <li>
+                <button type="button" class="cp-thumb is-active" data-character="himeko" data-theme="fire" data-faction="astral-express" aria-current="true"
+                        data-name="Himeko Nova" data-title-img="assets/images/logo/Himekonova title.webp" data-title-crop="1980 1080 33 217 1905 607"
+                        data-badge="Fire &middot; Erudition"
+                        data-desc="Navigator Astral Express yang elegan dan berani. Serangan api berskala luas untuk membakar seluruh barisan musuh."
+                        data-img="assets/images/heroes/himeko.webp" data-body-x="40%" data-art-y="10%"
+                        style="--fx: 43%; --fy: 35%;">
+                  <img src="assets/images/heroes/himeko.webp" alt="" width="2048" height="2048" loading="lazy" />
+                  <span class="cp-thumb-name">Himeko Nova</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="cp-thumb" data-character="rin" data-theme="ice" data-faction="fate"
+                        data-name="Rin Tohsaka" data-title-img="assets/images/logo/Rin Title.webp" data-title-crop="1980 1080 74 319 1906 368"
+                        data-badge="Ice &middot; Kolaborasi Fate"
+                        data-desc="Magus berbakat dari Fuyuki. Karakter kolaborasi Fate x HSR dengan kostum &amp; elemen edisi spesial."
+                        data-img="assets/images/heroes/Character_Rin_Tohsaka_Splash_Art.webp" data-body-x="50%"
+                        style="--fx: 48%; --fy: 36%;">
+                  <img src="assets/images/heroes/Character_Rin_Tohsaka_Splash_Art.webp" alt="" width="2048" height="2048" loading="lazy" />
+                  <span class="cp-thumb-name">Rin Tohsaka</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="cp-thumb" data-character="gilgamesh" data-theme="gold" data-faction="fate"
+                        data-name="Gilgamesh" data-title-img="assets/images/logo/Gilgamesh Title transparent.webp" data-title-crop="2816 1536 206 396 2542 736"
+                        data-badge="Imaginary &middot; Kolaborasi Fate"
+                        data-desc="Sang Raja para Pahlawan. Karakter kolaborasi Fate x HSR yang memanggil harta pusaka dari Gate of Babylon."
+                        data-img="assets/images/heroes/Character_Gilgamesh_Splash_Art.webp" data-body-x="32%" data-art-y="12%"
+                        style="--fx: 48%; --fy: 34%;">
+                  <img src="assets/images/heroes/Character_Gilgamesh_Splash_Art.webp" alt="" width="2048" height="2048" loading="lazy" />
+                  <span class="cp-thumb-name">Gilgamesh</span>
+                </button>
+              </li>
+              </ul>
+              <button type="button" class="cp-film-arrow" data-step="1" aria-label="Karakter berikutnya">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <a href="index.html#home" class="footer-logo">HONKAI<span>: STAR RAIL</span></a>
+
+        <div class="footer-social">
+          <a href="#" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">Instagram</a>
+          <a href="#" class="social-link" aria-label="YouTube" target="_blank" rel="noopener">YouTube</a>
+          <a href="#" class="social-link" aria-label="X / Twitter" target="_blank" rel="noopener">X</a>
+          <a href="#" class="social-link" aria-label="Discord" target="_blank" rel="noopener">Discord</a>
+        </div>
+      </div>
+
+      <hr class="footer-divider" />
+
+      <p class="footer-copyright">
+        &copy; All rights reserved by miHoYo / HoYoverse. Other properties and any right, title, and interest thereof and therein (intellectual property rights included) not derived from Honkai: Star Rail belong to their respective owners. This is a non-commercial fan-made project created for a web development competition.
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/particles.js?v=20261001"></script>
+  <script src="js/main.js?v=20261001"></script>
+</body>
+</html>
