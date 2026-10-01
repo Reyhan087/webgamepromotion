@@ -1,0 +1,35 @@
+/* =========================================================================
+   HONKAI: STAR RAIL - FAN LANDING PAGE
+   Color palette & core sizing tersimpan sebagai CSS variables di :root
+   biar gampang diganti nanti tanpa perlu edit banyak tempat.
+   ========================================================================= */
+
+:root {
+  /* --- Base palette (galaxy / dark sci-fi) --- */
+  --color-bg: #05060f;
+  --color-bg-alt: #0a0e1f;
+  --color-card: #10132a;
+  --color-card-border: rgba(139, 92, 246, 0.18);
+
+  --color-text: #e5e7eb;
+  --color-text-dim: #94a3b8;
+  --color-text-muted: #5b6479;
+
+  /* --- Brand / accent --- */
+  --color-primary: #8b5cf6;      /* nebula purple */
+  --color-primary-light: #a78bfa;
+  --color-pink: #f0abfc;
+  --color-cyan: #22d3ee;
+
+  /* --- Elemen karakter (dipakai untuk badge & glow tiap slide) --- */
+  --color-fire: #ff6b45;         /* Himeko */
+  --color-ice: #3fd0f0;          /* Rin Tohsaka */
+  --color-gold: #f7c948;         /* Gilgamesh */
+
+  --font-display: 'Orbitron', sans-serif;
+  --font-body: 'Rajdhani', sans-serif;
+
+  --navbar-height: 76px;
+  --transition-base: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  --slide-fade: 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+}

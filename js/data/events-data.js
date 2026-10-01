@@ -1,6 +1,6 @@
 /* =========================================================================
    DATA EVENT & BERITA
-   Dipakai halaman detail event.html (lihat initEventDetail di main.js):
+   Dipakai halaman detail event.html (lihat initEventDetail di js/pages/event-detail.js):
    isi artikel + daftar "Berita Lainnya" dibangun dari array ini.
    Kartu di events.html menautkan ke event.html?id=<id>.
 

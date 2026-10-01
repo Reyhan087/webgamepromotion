@@ -1,0 +1,413 @@
+/* =========================================================================
+   CHARACTER PAGE (character.html)
+   Sidebar kelompok (garis vertikal + ikon) | panel karakter besar,
+   filmstrip thumbnail di bawah panel. Warna ikut variabel tema karakter
+   (--accent, --bg-a..c) dari data-theme, sama seperti Character Spotlight.
+   ========================================================================= */
+.cp-section {
+  padding-top: calc(var(--navbar-height) + 1.5rem);
+  min-height: 100vh;
+  overflow-x: clip; /* splash art yang keluar panel tidak bikin scroll horizontal */
+}
+
+.cp-section > .particle-canvas {
+  z-index: 0;
+}
+
+/* Ukuran panel dibagi di level layout supaya sidebar & label bisa diatur
+   relatif terhadap panel:
+   --orig-h   = dasar ukuran art (art = 125% nilai ini; skala art tetap)
+   --box-h    = tinggi kotak panel (boleh hampir setinggi art)
+   --stage-mt = ruang di atas panel untuk bagian art yang keluar di atas
+                kotak, sehingga puncak art (termasuk ayunan --bob) tepat
+                di bawah navbar. */
+.cp-layout {
+  --orig-h: clamp(440px, 60vh, 600px);
+  --box-h: clamp(360px, 54vh, 560px);
+  --bob: 10px; /* amplitudo animasi melayang art (lihat cpArtBob) */
+  --stage-mt: max(2.75rem, calc(var(--orig-h) * 1.25 - var(--box-h) - 0.5rem + var(--bob)));
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: start;
+}
+
+.cp-main {
+  position: relative;
+}
+
+/* Label halaman kecil (h1) di atas sudut kiri-atas panel */
+.cp-page-label {
+  position: absolute;
+  top: calc(var(--stage-mt) - 1.9rem);
+  left: 0.25rem;
+  margin: 0;
+  z-index: 2;
+}
+
+/* --- Sidebar: ikon bulat disambung garis vertikal, tengah-vertikal
+   terhadap panel karakter (tinggi daftar = 2 ikon + jarak + padding) --- */
+.cp-factions {
+  --cp-icon: 88px; /* diameter ikon logo faksi */
+  margin-top: max(0px, calc(var(--stage-mt) + (var(--box-h) - (var(--cp-icon) * 2 + 2.75rem)) / 2));
+}
+
+.cp-faction-list {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* Garis penghubung melewati tengah ikon */
+.cp-faction-list::before {
+  content: '';
+  position: absolute;
+  top: 1.5rem;
+  bottom: 1.5rem;
+  left: calc(var(--cp-icon) / 2 - 1px);
+  width: 2px;
+  background: linear-gradient(180deg, transparent, rgba(167, 139, 250, 0.45) 15%, rgba(167, 139, 250, 0.45) 85%, transparent);
+}
+
+.cp-faction {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-dim);
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color var(--transition-base);
+}
+
+.cp-faction-icon {
+  flex: none;
+  width: var(--cp-icon);
+  height: var(--cp-icon);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(167, 139, 250, 0.35);
+  background: var(--color-bg);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), background var(--transition-base), color var(--transition-base);
+}
+
+.cp-faction-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Logo faksi: emblem bulat dengan ujung bintang di luar cincin emas ->
+   diperbesar agar cincin emas pas mengisi lingkaran, ujungnya terpotong rapi. */
+.cp-faction-icon {
+  position: relative;
+  overflow: hidden;
+}
+
+.cp-faction-icon img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 130%;
+  max-width: none;
+  height: 130%;
+  object-fit: contain;
+  translate: -50% -50%;
+  /* Faksi tidak aktif: logo diredupkan; .is-active mengembalikan warna penuh */
+  opacity: 0.55;
+  filter: grayscale(0.6) brightness(0.8);
+  transition: opacity 0.25s ease, filter 0.25s ease;
+}
+
+.cp-faction:hover .cp-faction-icon img {
+  opacity: 0.8;
+  filter: grayscale(0.3) brightness(0.9);
+}
+
+.cp-faction.is-active .cp-faction-icon img {
+  opacity: 1;
+  filter: none;
+}
+
+.cp-faction:hover {
+  color: var(--color-text);
+}
+
+.cp-faction:hover .cp-faction-icon {
+  border-color: var(--color-primary-light);
+}
+
+.cp-faction.is-active {
+  color: #fff;
+}
+
+.cp-faction.is-active .cp-faction-icon {
+  color: #fff;
+  border-color: var(--color-primary-light);
+  background: linear-gradient(135deg, var(--color-primary), #6d28d9);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.18), 0 0 22px rgba(139, 92, 246, 0.6);
+  animation: cpFactionGlow 2.6s ease-in-out infinite;
+}
+
+/* Glow berdenyut pada ikon aktif (ikut pindah bersama .is-active) */
+@keyframes cpFactionGlow {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.18), 0 0 22px rgba(139, 92, 246, 0.55); }
+  50%      { box-shadow: 0 0 0 6px rgba(139, 92, 246, 0.26), 0 0 38px rgba(167, 139, 250, 0.85); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cp-faction.is-active .cp-faction-icon {
+    animation: none;
+  }
+}
+
+/* --- Panel karakter besar ---
+   Tampilan sama dengan versi awal, hanya kotaknya lebih pendek dan TIDAK
+   overflow: hidden -> splash art (ukuran & posisi horizontal tetap seperti
+   semula) keluar lewat tepi atas kotak, bukan terpotong.
+   --orig-h = tinggi kotak versi awal; ukuran art tetap dihitung darinya.
+   Margin atas = bagian art yang keluar di atas kotak, supaya tidak menabrak
+   judul halaman. */
+.cp-stage {
+  --accent: var(--color-primary-light);
+  --bg-a: #0f0a24;
+  --bg-b: #1e1640;
+  --bg-c: #2a1a55;
+  --body-x: 50%;
+  --art-y: 0%; /* geser art ke bawah per karakter (data-art-y) */
+  position: relative;
+  /* --content-h = blok teks tertinggi dari SEMUA karakter (diisi JS), jadi
+     ukuran kotak sama untuk tiap karakter walau panjang nama berbeda */
+  min-height: max(var(--box-h), calc(var(--content-h, 0px) + 2px)); /* +2px = border atas+bawah */
+  margin-top: var(--stage-mt);
+  display: flex;
+  align-items: center;
+  border-radius: 24px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  background:
+    radial-gradient(circle at 68% 50%, color-mix(in srgb, var(--accent) 35%, transparent) 0%, transparent 55%),
+    linear-gradient(135deg, var(--bg-a) 0%, var(--bg-b) 60%, var(--bg-c) 100%);
+  box-shadow: 0 30px 80px -30px color-mix(in srgb, var(--accent) 50%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.cp-stage > .particle-canvas {
+  border-radius: inherit;
+}
+
+/* Splash art: ukuran sama dengan versi awal (125% tinggi kotak awal), titik
+   tengah tubuh (--body-x) tepat di tengah area kosong sebelah kanan kolom
+   teks (.cp-stage-info, lebar min(46%, 440px)). Dasar gambar menempel di
+   dasar kotak, jadi sisa tinggi art keluar di atas kotak. */
+.cp-stage-img {
+  position: absolute;
+  z-index: 1;
+  left: calc((min(46%, 440px) + 100%) / 2);
+  bottom: 0;
+  height: calc(var(--orig-h) * 1.25);
+  width: auto;
+  max-width: none;
+  translate: calc(var(--body-x) * -1) var(--art-y);
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
+  pointer-events: none;
+  /* Melayang naik-turun ±--bob di sekitar posisi istirahat. Pakai `transform`
+     (bukan `translate` yang dipakai untuk posisi) supaya keduanya tergabung.
+     Delay negatif setengah durasi -> mulai tepat di posisi istirahat. */
+  animation: cpArtBob 3.5s ease-in-out -1.75s infinite alternate;
+}
+
+@keyframes cpArtBob {
+  from { transform: translateY(calc(var(--bob, 10px) * -1)); }
+  to   { transform: translateY(var(--bob, 10px)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cp-stage-img {
+    animation: none;
+  }
+}
+
+/* Scrim kiri supaya teks tetap terbaca di atas gambar */
+.cp-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(5, 6, 15, 0.8) 0%, rgba(5, 6, 15, 0.45) 38%, transparent 60%);
+  pointer-events: none;
+}
+
+.cp-stage-info {
+  position: relative;
+  z-index: 2;
+  width: min(46%, 440px);
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.cp-stage-faction {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+}
+
+/* Grafis judul nama di panel: selebar kolom info (maks ~340px) */
+.cp-title {
+  width: 100%;
+}
+
+.cp-bio {
+  margin-top: 1.25rem;
+  padding: 1rem 1.15rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-left: 3px solid var(--accent);
+  background: rgba(5, 6, 15, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.cp-bio-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.cp-bio p {
+  margin-top: 0.4rem;
+  color: #dbe2ee;
+  font-size: 1rem;
+}
+
+/* --- Filmstrip: panah kiri/kanan + track thumbnail yang bisa discroll --- */
+.cp-film {
+  margin-top: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cp-film-arrow {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(226, 232, 240, 0.35);
+  background: rgba(5, 6, 15, 0.35);
+  color: #fff;
+  transition: background var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.cp-film-arrow svg {
+  width: 20px;
+  height: 20px;
+}
+
+.cp-film-arrow:hover {
+  background: rgba(139, 92, 246, 0.55);
+  border-color: var(--color-primary-light);
+  box-shadow: 0 0 22px rgba(139, 92, 246, 0.55);
+}
+
+.cp-film-track {
+  position: relative; /* acuan offsetLeft thumbnail untuk scroll di JS */
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  gap: 0.85rem;
+  margin: 0;
+  padding: 0.5rem 0.25rem;
+  list-style: none;
+  justify-content: safe center;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.cp-film-track::-webkit-scrollbar {
+  display: none;
+}
+
+.cp-film-track > li {
+  flex: none;
+  scroll-snap-align: center;
+}
+
+.cp-thumb {
+  position: relative;
+  display: block;
+  width: 108px;
+  aspect-ratio: 1;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 2px solid rgba(148, 163, 184, 0.25);
+  background: linear-gradient(135deg, var(--bg-a, #0f0a24), var(--bg-c, #2a1a55));
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), opacity var(--transition-base), transform var(--transition-base);
+}
+
+/* Crop wajah: titik (--fx, --fy) di gambar diletakkan di tengah thumbnail */
+.cp-thumb img {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  width: 520%;
+  max-width: none;
+  height: auto;
+  translate: calc(var(--fx, 50%) * -1) calc(var(--fy, 30%) * -1);
+}
+
+.cp-thumb-name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.1rem 0.4rem 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #fff;
+  background: linear-gradient(to top, rgba(5, 6, 15, 0.9), transparent);
+}
+
+.cp-thumb:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.cp-thumb.is-active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent), 0 8px 24px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+/* Karakter di luar kelompok yang dipilih diredupkan (tetap bisa diklik) */
+.cp-thumb.is-dimmed {
+  opacity: 0.4;
+  filter: grayscale(0.6);
+}
+
+.cp-thumb.is-dimmed:hover {
+  opacity: 0.75;
+}

@@ -1,0 +1,386 @@
+/* =========================================================================
+   SPECIAL PROGRAM / PREVIEW
+   ========================================================================= */
+.program-section > .particle-canvas {
+  z-index: 0;
+}
+
+.program-panel {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  border-radius: 24px;
+  border: 1px solid rgba(247, 201, 72, 0.28);
+  background:
+    linear-gradient(160deg, rgba(30, 22, 58, 0.92) 0%, rgba(14, 12, 34, 0.94) 60%, rgba(10, 14, 31, 0.96) 100%);
+  box-shadow: 0 30px 80px -30px rgba(139, 92, 246, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Dekorasi: key visual event di-blur tipis di belakang panel */
+.program-panel-deco {
+  position: absolute;
+  inset: 0;
+  background: url('../../assets/images/banners/eventslandingpage.jpg') center / cover no-repeat;
+  opacity: 0.14;
+  filter: blur(10px) saturate(1.2);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 15%, #000 70%);
+  mask-image: linear-gradient(to bottom, transparent 15%, #000 70%);
+  transform: scale(1.05);
+  pointer-events: none;
+}
+
+/* Garis emas tipis di tepi atas, mirip bingkai panel event */
+.program-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+  opacity: 0.8;
+}
+
+.program-head,
+.program-grid {
+  position: relative;
+}
+
+.program-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.75rem;
+  border-bottom: 1px solid rgba(247, 201, 72, 0.2);
+}
+
+.program-title {
+  font-size: clamp(1.8rem, 4vw, 2.75rem);
+  font-weight: 900;
+  line-height: 1.1;
+  background: linear-gradient(180deg, #fff6d6 0%, var(--color-gold) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.program-sub {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-text-dim);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.program-chip {
+  padding: 0.15rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1a1206;
+  background: linear-gradient(90deg, #fde68a, var(--color-gold));
+}
+
+.program-note {
+  color: var(--color-pink);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.program-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: clamp(1.25rem, 3vw, 2.25rem);
+  align-items: start;
+}
+
+/* --- Panel preview event: banner utuh 16:9, keterangan di bawah gambar
+   (bukan overlay) supaya teks yang sudah tercetak di banner tidak tertutup --- */
+.preview-stage {
+  --accent: var(--color-primary-light);
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  background:
+    radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--accent) 22%, transparent) 0%, transparent 70%),
+    linear-gradient(160deg, #1b1236, #0a0a1c);
+  transition: border-color var(--transition-base), background var(--transition-base);
+}
+
+.preview-stage[data-theme="nebula"] { --accent: var(--color-primary-light); }
+.preview-stage[data-theme="fire"] { --accent: var(--color-fire); }
+.preview-stage[data-theme="ice"]  { --accent: var(--color-ice); }
+.preview-stage[data-theme="gold"] { --accent: var(--color-gold); }
+
+.preview-media {
+  position: relative;
+  overflow: hidden; /* wave glow terpotong rapi di dalam banner */
+  aspect-ratio: 16 / 9;
+  background: #0a0a1c;
+}
+
+.preview-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-plate {
+  padding: 1rem 1.25rem 1.2rem;
+  border-top: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.preview-phase {
+  display: inline-block;
+  padding: 0.1rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1a1206;
+  border-radius: 4px;
+  background: var(--color-gold);
+}
+
+.preview-name {
+  margin-top: 0.4rem;
+  font-size: clamp(1.25rem, 2.2vw, 1.7rem);
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.preview-tag {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.preview-desc {
+  margin-top: 0.4rem;
+  font-size: 0.95rem;
+  color: #cbd5e1;
+}
+
+/* --- Tombol thumbnail: aktif vs non-aktif dibedakan opacity & border --- */
+.preview-thumbs {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.preview-thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 2px solid rgba(148, 163, 184, 0.2);
+  background: linear-gradient(160deg, #1b1236, #0a0a1c);
+  opacity: 0.5;
+  filter: grayscale(0.4);
+  transition: opacity var(--transition-base), border-color var(--transition-base), filter var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.preview-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-thumb span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1rem 0.4rem 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fff;
+  text-align: center;
+  background: linear-gradient(to top, rgba(5, 6, 15, 0.9), transparent);
+}
+
+.preview-thumb:hover {
+  opacity: 0.85;
+  filter: none;
+  transform: translateY(-3px);
+}
+
+.preview-thumb.is-active {
+  opacity: 1;
+  filter: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 1px rgba(247, 201, 72, 0.4), 0 10px 28px -8px rgba(247, 201, 72, 0.55);
+}
+
+/* --- Wave glow: cahaya lembut yang "mengalir" melintasi banner ---
+   Blob elips lebar dengan falloff radial sangat bertahap (tanpa tepi keras,
+   tanpa filter blur -> ringan). Dua animasi berjalan bersamaan:
+     - waveX   (properti `translate`): geser kiri -> kanan, satu kurva halus
+     - waveBob (properti `transform`): naik-turun ala sinus + sedikit
+       berubah bentuk (scale) supaya terasa organik seperti ombak
+   Siklus 12.5s = lintasan ~3.5s + jeda ~9s.
+   ::after = loop berkala, ::before = satu gelombang saat hover.
+   Kontainer (.preview-media / .preview-thumb) sudah overflow: hidden. */
+.preview-media::before,
+.preview-media::after,
+.preview-thumb::before,
+.preview-thumb::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: -30%;
+  left: 0;
+  width: 70%;
+  height: 160%;
+  /* closest-side: gradient habis tepat di dalam kotak -> tidak ada tepi terpotong */
+  background: radial-gradient(ellipse closest-side at center,
+    rgba(255, 255, 255, var(--wave-a, 0.18)) 0%,
+    rgba(255, 255, 255, calc(var(--wave-a, 0.18) * 0.6)) 30%,
+    rgba(255, 255, 255, calc(var(--wave-a, 0.18) * 0.25)) 58%,
+    rgba(255, 255, 255, calc(var(--wave-a, 0.18) * 0.07)) 80%,
+    transparent 100%);
+  translate: -110% 0;
+  pointer-events: none;
+}
+
+.preview-media::after,
+.preview-thumb::after {
+  animation:
+    waveX 12.5s ease-in-out infinite,
+    waveBob 12.5s ease-in-out infinite;
+  animation-delay: var(--wave-delay, 0s);
+}
+
+.preview-media:hover::before,
+.preview-thumb:hover::before {
+  animation:
+    waveXOnce 3.5s ease-in-out,
+    waveBobOnce 3.5s ease-in-out;
+}
+
+/* Versi thumbnail: sedikit lebih redup, waktunya digeser per tombol */
+.preview-thumb {
+  --wave-a: 0.15;
+}
+
+.preview-thumb:nth-child(1) { --wave-delay: 1.4s; }
+.preview-thumb:nth-child(2) { --wave-delay: 2.4s; }
+.preview-thumb:nth-child(3) { --wave-delay: 3.4s; }
+
+/* Label tetap di atas cahaya */
+.preview-thumb span {
+  z-index: 2;
+}
+
+/* 28% dari 12.5s = 3.5s lintasan, sisanya jeda */
+@keyframes waveX {
+  0%        { translate: -110% 0; }
+  28%, 100% { translate: 150% 0; }
+}
+
+/* Puncak/lembah di tiap keyframe + ease-in-out = gerak mirip sinus */
+@keyframes waveBob {
+  0%        { transform: translateY(0) scale(0.9, 1); }
+  7%        { transform: translateY(-7%) scale(1, 1.08); }
+  14%       { transform: translateY(6%) scale(1.08, 0.94); }
+  21%       { transform: translateY(-5%) scale(1, 1.05); }
+  28%, 100% { transform: translateY(0) scale(0.92, 1); }
+}
+
+@keyframes waveXOnce {
+  from { translate: -110% 0; }
+  to   { translate: 150% 0; }
+}
+
+@keyframes waveBobOnce {
+  0%   { transform: translateY(0) scale(0.9, 1); }
+  25%  { transform: translateY(-7%) scale(1, 1.08); }
+  50%  { transform: translateY(6%) scale(1.08, 0.94); }
+  75%  { transform: translateY(-5%) scale(1, 1.05); }
+  100% { transform: translateY(0) scale(0.92, 1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preview-media::before,
+  .preview-media::after,
+  .preview-thumb::before,
+  .preview-thumb::after {
+    animation: none !important;
+  }
+}
+
+/* --- Kalender event (gambar statis, gaya bingkai sama dengan .preview-stage) --- */
+.program-photo {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #0a0a1c;
+  border: 1px solid color-mix(in srgb, var(--color-primary-light) 45%, transparent);
+}
+
+.program-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- Video --- */
+.video-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.2);
+}
+
+.video-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-caption {
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  background: rgba(10, 14, 31, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.video-caption-label {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-cyan);
+}
+
+.video-caption p {
+  margin-top: 0.35rem;
+  color: var(--color-text-dim);
+}

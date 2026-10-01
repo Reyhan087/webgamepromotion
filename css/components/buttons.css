@@ -1,0 +1,49 @@
+/* =========================================================================
+   BUTTONS
+   ========================================================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 2rem;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  border-radius: 999px;
+  transition: transform var(--transition-base), box-shadow var(--transition-base), background var(--transition-base), border-color var(--transition-base);
+  border: 2px solid transparent;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, var(--color-primary), #6d28d9);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.35);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 12px 32px rgba(139, 92, 246, 0.55);
+}
+
+.btn-outline {
+  background: rgba(5, 6, 15, 0.35);
+  border-color: rgba(226, 232, 240, 0.45);
+  color: var(--color-text);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-primary-light);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.35);
+}
+
+.btn-lg {
+  padding: 1.05rem 2.75rem;
+  font-size: 1.1rem;
+}

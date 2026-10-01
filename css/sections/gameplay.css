@@ -1,0 +1,144 @@
+/* =========================================================================
+   GAMEPLAY HIGHLIGHTS SECTION
+   ========================================================================= */
+.gameplay-section > .particle-canvas {
+  z-index: 0;
+}
+
+/* Marquee tanpa box: item melayang langsung di atas starfield.
+   Track berisi 2 .gameplay-group identik; digeser -50% (= tepat 1 grup)
+   lalu loop, jadi sambungannya tidak terlihat. */
+.gameplay-marquee {
+  --item-width: 300px;
+  --marquee-duration: 36s;
+  /* Ruang atas untuk glow neon ikon: overflow + mask memotong apa pun di luar
+     kotak ini, jadi kotaknya diperbesar lewat padding-top lalu dinetralkan
+     dengan margin-top -> posisi konten & layout tetap sama. (Bawah tidak
+     perlu: ikon jauh dari tepi bawah karena ada judul + deskripsi.) */
+  --glow-room: 2rem;
+  margin-top: calc(3.5rem - var(--glow-room));
+  padding-top: var(--glow-room);
+  overflow: hidden;
+  /* Item memudar di kedua tepi, tidak terpotong tajam */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.gameplay-track {
+  display: flex;
+  width: max-content;
+  animation: gameplay-marquee var(--marquee-duration) linear infinite;
+}
+
+/* Jeda saat hover hanya di perangkat ber-mouse; di layar sentuh :hover
+   "nyangkut" setelah di-tap sehingga marquee berhenti */
+@media (hover: hover) {
+  .gameplay-marquee:hover .gameplay-track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes gameplay-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.gameplay-group {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.gameplay-item {
+  --accent: var(--color-cyan);
+  position: relative;
+  flex: 0 0 var(--item-width);
+  padding: 0.5rem 2.25rem;
+  text-align: center;
+}
+
+.gameplay-item:nth-child(2) { --accent: var(--color-primary-light); }
+.gameplay-item:nth-child(3) { --accent: var(--color-gold); }
+.gameplay-item:nth-child(4) { --accent: var(--color-pink); }
+
+.gameplay-icon {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 1.4rem;
+  color: var(--accent);
+  /* Glow neon dua lapis (inti tajam + pendar lebar) sewarna --accent */
+  filter:
+    drop-shadow(0 0 3px color-mix(in srgb, var(--accent) 90%, transparent))
+    drop-shadow(0 0 12px color-mix(in srgb, var(--accent) 65%, transparent));
+}
+
+/* Ikon asli (assets/images/logo/*Icon.webp) dipakai sebagai mask lalu diisi
+   --accent, jadi warnanya selalu sama dengan aksen card. URL mask di HTML.
+   Sedikit lebih besar dari kotak 56px (overflow ke luar) karena artwork
+   punya bentuk tidak persegi; ukuran & layout kotak tetap. */
+.gameplay-icon-art {
+  position: absolute;
+  inset: -6px;
+  background: var(--accent);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* Glow bulat lembut di belakang ikon */
+.gameplay-icon::before {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 22%, transparent) 0%, transparent 70%);
+  z-index: -1;
+  transition: transform var(--transition-base);
+}
+
+.gameplay-item:hover .gameplay-icon::before {
+  transform: scale(1.2);
+}
+
+/* Reduced motion: tanpa animasi, baris bisa digeser manual */
+@media (prefers-reduced-motion: reduce) {
+  .gameplay-marquee {
+    overflow-x: auto;
+  }
+
+  .gameplay-track {
+    animation: none;
+  }
+
+  .gameplay-group[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .gameplay-marquee {
+    --item-width: 240px;
+    --marquee-duration: 30s;
+  }
+
+  .gameplay-item {
+    padding: 0.5rem 1.5rem;
+  }
+}
+
+
+.gameplay-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.gameplay-desc {
+  font-size: 0.9rem;
+  color: var(--color-text-dim);
+  line-height: 1.55;
+}

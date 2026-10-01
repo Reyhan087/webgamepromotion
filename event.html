@@ -14,7 +14,7 @@
   <!-- Tailwind CSS (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    // Extend Tailwind dengan warna & font custom biar konsisten sama CSS variables di style.css
+    // Extend Tailwind dengan warna & font custom biar konsisten sama CSS variables di css/base/tokens.css
     tailwind.config = {
       theme: {
         extend: {
@@ -42,7 +42,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
-  <link rel="stylesheet" href="css/style.css?v=20261001" />
+  <link rel="stylesheet" href="css/style.css?v=20261002f" />
 </head>
 <body class="bg-space-deep text-slate-200 font-body overflow-x-hidden">
 
@@ -80,8 +80,8 @@
 
     <!-- ==================== DETAIL EVENT ====================
          Template tunggal untuk semua event: event.html?id=<id>.
-         Isi artikel & daftar "Berita Lainnya" diisi initEventDetail (main.js)
-         dari data di js/events-data.js. -->
+         Isi artikel & daftar "Berita Lainnya" diisi initEventDetail (js/pages/event-detail.js)
+         dari data di js/data/events-data.js. -->
     <section id="event-detail" class="section events-page ed-section">
       <div class="section-inner ed-inner">
         <a href="events.html" class="ed-back">
@@ -124,13 +124,23 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-top">
-        <a href="index.html#home" class="footer-logo">HONKAI<span>: STAR RAIL</span></a>
+        <a href="index.html#home" class="footer-logo" aria-label="Honkai: Star Rail - kembali ke beranda">
+          <img src="assets/images/logo/HSR_Logo.webp" alt="Honkai: Star Rail" width="690" height="542" loading="lazy" />
+        </a>
 
         <div class="footer-social">
-          <a href="#" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">Instagram</a>
-          <a href="#" class="social-link" aria-label="YouTube" target="_blank" rel="noopener">YouTube</a>
-          <a href="#" class="social-link" aria-label="X / Twitter" target="_blank" rel="noopener">X</a>
-          <a href="#" class="social-link" aria-label="Discord" target="_blank" rel="noopener">Discord</a>
+          <a href="https://discord.com/invite/honkaistarrail" class="social-link social-link--discord" aria-label="Discord Honkai: Star Rail" target="_blank" rel="noopener noreferrer">
+            <img src="assets/images/Medsos/discord.webp" alt="" width="661" height="512" loading="lazy" />
+          </a>
+          <a href="https://www.youtube.com/@HonkaiStarRail" class="social-link social-link--youtube" aria-label="YouTube Honkai: Star Rail" target="_blank" rel="noopener noreferrer">
+            <img src="assets/images/Medsos/YouTube.webp" alt="" width="800" height="553" loading="lazy" />
+          </a>
+          <a href="https://www.instagram.com/honkaistarrail/" class="social-link social-link--instagram" aria-label="Instagram Honkai: Star Rail" target="_blank" rel="noopener noreferrer">
+            <svg class="social-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="igGrad" gradientUnits="userSpaceOnUse" cx="7" cy="23" r="24"><stop offset="0" stop-color="#fdf497" /><stop offset="0.12" stop-color="#fdf497" /><stop offset="0.45" stop-color="#fd5949" /><stop offset="0.65" stop-color="#d6249f" /><stop offset="1" stop-color="#285aeb" /></radialGradient></defs><rect x="2.6" y="2.6" width="18.8" height="18.8" rx="5.6" fill="none" stroke="url(#igGrad)" stroke-width="2.2" /><circle cx="12" cy="12" r="4.4" fill="none" stroke="url(#igGrad)" stroke-width="2.2" /><circle cx="17.3" cy="6.7" r="1.35" fill="url(#igGrad)" /></svg>
+          </a>
+          <a href="https://x.com/honkaistarrail" class="social-link social-link--x" aria-label="X Honkai: Star Rail" target="_blank" rel="noopener noreferrer">
+            <img src="assets/images/Medsos/X.webp" alt="" width="960" height="960" loading="lazy" />
+          </a>
         </div>
       </div>
 
@@ -142,8 +152,22 @@
     </div>
   </footer>
 
-  <script src="js/particles.js?v=20261001"></script>
-  <script src="js/events-data.js?v=20261001"></script>
-  <script src="js/main.js?v=20261001"></script>
+  <!-- JS: lib -> data -> core -> components -> sections -> pages -> main.js -->
+  <script src="js/lib/particles.js?v=20261002f"></script>
+  <script src="js/data/events-data.js?v=20261002f"></script>
+  <script src="js/core/utils.js?v=20261002f"></script>
+  <script src="js/components/loader.js?v=20261002f"></script>
+  <script src="js/components/navbar.js?v=20261002f"></script>
+  <script src="js/components/particle-layers.js?v=20261002f"></script>
+  <script src="js/components/carousel.js?v=20261002f"></script>
+  <script src="js/components/video.js?v=20261002f"></script>
+  <script src="js/components/scroll-reveal.js?v=20261002f"></script>
+  <script src="js/sections/hero.js?v=20261002f"></script>
+  <script src="js/sections/character-spotlight.js?v=20261002f"></script>
+  <script src="js/sections/program.js?v=20261002f"></script>
+  <script src="js/pages/events.js?v=20261002f"></script>
+  <script src="js/pages/event-detail.js?v=20261002f"></script>
+  <script src="js/pages/character.js?v=20261002f"></script>
+  <script src="js/main.js?v=20261002f"></script>
 </body>
 </html>

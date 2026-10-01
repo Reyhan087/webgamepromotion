@@ -1,0 +1,522 @@
+/* =========================================================================
+   CHARACTER SPOTLIGHT - CAROUSEL KARAKTER CUTOUT
+   Ketiga slide memakai struktur yang SAMA:
+     gradient tema -> glow besar -> light rays berputar
+     -> cutout karakter (floating) -> partikel (canvas) -> caption.
+   Warna tiap slide cukup diatur lewat variabel tema di bawah (data-theme).
+   Variabel tema yang sama dipakai halaman character.html (.cp-stage/.cp-thumb).
+   ========================================================================= */
+
+/* --- Variabel tema per elemen --- */
+.char-spotlight[data-theme="fire"],
+.char-slide[data-theme="fire"],
+.cp-stage[data-theme="fire"],
+.cp-thumb[data-theme="fire"] {
+  --accent: #ff6b45;      /* warna utama elemen */
+  --accent-2: #ff2e63;    /* warna sekunder (rays lapis kedua) */
+  --accent-soft: #ffc2a8; /* versi terang untuk inti cahaya */
+  --bg-a: #12061c;
+  --bg-b: #3a0f2e;
+  --bg-c: #5c1a1a;
+}
+
+.char-spotlight[data-theme="ice"],
+.char-slide[data-theme="ice"],
+.cp-stage[data-theme="ice"],
+.cp-thumb[data-theme="ice"] {
+  --accent: #3fd0f0;
+  --accent-2: #3b82f6;
+  --accent-soft: #c4f5ff;
+  --bg-a: #040b1f;
+  --bg-b: #0b2447;
+  --bg-c: #0e4a6b;
+}
+
+.char-spotlight[data-theme="gold"],
+.char-slide[data-theme="gold"],
+.cp-stage[data-theme="gold"],
+.cp-thumb[data-theme="gold"] {
+  --accent: #f7c948;
+  --accent-2: #f59e0b;
+  --accent-soft: #fff1b8;
+  --bg-a: #0f0a14;
+  --bg-b: #3a2408;
+  --bg-c: #5c3b0a;
+}
+
+.char-spotlight {
+  --accent: var(--color-primary-light);
+  /* Titik pusat karakter: glow & rays berputar di sekitar titik ini */
+  --cx: 68%;
+  --cy: 52%;
+  /* Tinggi fade atas; karakter mulai di bawahnya supaya kepala tidak tertutup */
+  --fade-top-h: clamp(100px, 14vh, 160px);
+  /* Panjang blend background tema dari --color-bg (lihat .char-slide-bg) */
+  --bg-blend-h: clamp(240px, 36vh, 380px);
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  min-height: 620px;
+  max-height: 1000px;
+  /* Potong semua sisi: karakter tidak boleh menembus ke section About di
+     atas (dulu kepalanya "terpotong" oleh fade atas). Ruang floating sudah
+     disediakan lewat padding-top .char-cutout; bagian bawah yang terpotong
+     tersembunyi di balik fade bawah. */
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+/* Label kecil pojok kiri atas */
+.char-spotlight-label {
+  position: absolute;
+  z-index: 5;
+  top: clamp(5rem, 14vh, 8rem);
+  left: clamp(1.25rem, 6vw, 6rem);
+}
+
+.char-spotlight-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.char-spotlight-kicker::before {
+  content: '';
+  width: 28px;
+  height: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+  transition: background var(--transition-base);
+}
+
+/* Slide: crossfade */
+.char-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--slide-fade), visibility 0s linear 0.9s;
+}
+
+.char-slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--slide-fade), visibility 0s;
+  z-index: 1;
+}
+
+/* Hemat GPU: semua animasi di slide yang tidak aktif di-pause, begitu juga
+   seluruh section saat di luar layar (.is-offscreen dari
+   initCharacterCarousel, IntersectionObserver) */
+.char-slide:not(.is-active) *,
+.char-slide:not(.is-active) *::before,
+.char-slide:not(.is-active) *::after,
+.char-spotlight.is-offscreen *,
+.char-spotlight.is-offscreen *::before,
+.char-spotlight.is-offscreen *::after {
+  animation-play-state: paused !important;
+}
+
+/* --- Layer background: gradient tema (sendiri boleh overflow hidden) ---
+   Fade atas: gradient tema, glow & rays memudar ke --color-bg sepanjang
+   --bg-blend-h. Jauh lebih panjang dari .section-fade--top, jadi batas
+   dengan About tidak terlihat, tapi karakter (layer terpisah, di atas
+   layer ini) tetap tidak ikut tergelapkan.
+   Performa: fade dibuat dengan OVERLAY ::after warna --color-bg, bukan
+   mask-image. Isi layer ini (glow, rays) terus beranimasi; dengan mask,
+   seluruh section harus di-mask ulang tiap frame. Hasil visual sama
+   karena yang "terlihat di balik mask" dulu juga --color-bg. */
+.char-slide-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 60% 85% at var(--cx) var(--cy), color-mix(in srgb, var(--accent) 30%, transparent) 0%, transparent 65%),
+    linear-gradient(135deg, var(--bg-a) 0%, var(--bg-b) 50%, var(--bg-c) 80%, var(--bg-a) 100%);
+}
+
+/* Kebalikan persis dari mask lama: alpha overlay = 1 - alpha mask */
+.char-slide-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: var(--bg-blend-h);
+  background: linear-gradient(to bottom,
+    var(--color-bg) 0,
+    color-mix(in srgb, var(--color-bg) 88%, transparent) 30%,
+    color-mix(in srgb, var(--color-bg) 55%, transparent) 60%,
+    color-mix(in srgb, var(--color-bg) 20%, transparent) 85%,
+    transparent 100%);
+  pointer-events: none;
+}
+
+/* Glow besar di belakang karakter, berdenyut pelan */
+.char-glow {
+  position: absolute;
+  left: var(--cx);
+  top: var(--cy);
+  width: clamp(560px, 72vw, 1200px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  /* Gradient sudah lembut -> tidak perlu filter blur (jauh lebih ringan) */
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--accent-soft) 60%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 55%, transparent) 18%,
+    color-mix(in srgb, var(--accent) 32%, transparent) 30%,
+    color-mix(in srgb, var(--accent-2) 16%, transparent) 46%,
+    transparent 66%);
+  translate: -50% -50%;
+  animation: glowPulse 6s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+@keyframes glowPulse {
+  from { transform: scale(0.9);  opacity: 0.75; }
+  to   { transform: scale(1.06); opacity: 1; }
+}
+
+/* Light rays: 3 lapis beam tipis panjang (conic-gradient) yang berputar pelan
+   dengan kecepatan & arah berbeda -> efek "energy burst" ala splash art.
+   Performa: mask radial (ujung beam memudar) dipasang di wrapper yang DIAM,
+   lapisan <i> cuma berputar (transform) tanpa filter/blend -> bisa di-handle
+   GPU compositor tanpa repaint tiap frame. */
+.char-rays {
+  position: absolute;
+  left: var(--cx);
+  top: var(--cy);
+  /* Dibatasi: bagian luar beam sudah pudar oleh mask (transparan di 75%
+     radius), jadi kotak > ~2000px hanya menambah piksel yang diputar */
+  width: min(140vmax, 2000px);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  -webkit-mask-image: radial-gradient(circle closest-side, #000 6%, rgba(0, 0, 0, 0.55) 32%, transparent 75%);
+  mask-image: radial-gradient(circle closest-side, #000 6%, rgba(0, 0, 0, 0.55) 32%, transparent 75%);
+  pointer-events: none;
+}
+
+.char-rays i {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  animation: raySpin 70s linear infinite;
+  will-change: transform;
+}
+
+/* Lapis 1: 3 beam tajam warna utama */
+.char-rays i:nth-child(1) {
+  background: conic-gradient(from 10deg,
+    transparent 0deg, color-mix(in srgb, var(--accent) 90%, transparent) 1.5deg, transparent 3deg 115deg,
+    color-mix(in srgb, var(--accent-soft) 80%, transparent) 117deg, transparent 119deg 232deg,
+    color-mix(in srgb, var(--accent) 90%, transparent) 234deg, transparent 236.5deg 360deg);
+  opacity: 0.85;
+}
+
+/* Lapis 2: beam lebih lebar & lembut warna sekunder, putar berlawanan */
+.char-rays i:nth-child(2) {
+  background: conic-gradient(from 55deg,
+    transparent 0deg, color-mix(in srgb, var(--accent-2) 55%, transparent) 5deg, transparent 11deg 148deg,
+    color-mix(in srgb, var(--accent-2) 45%, transparent) 155deg, transparent 162deg 278deg,
+    color-mix(in srgb, var(--accent) 40%, transparent) 283deg, transparent 289deg 360deg);
+  opacity: 0.75;
+  animation-duration: 95s;
+  animation-direction: reverse;
+}
+
+/* Lapis 3 (garis sangat tipis) dimatikan demi performa: satu lapis putar
+   seukuran section lagi, sementara kontribusi visualnya paling kecil */
+.char-rays i:nth-child(3) {
+  display: none;
+}
+
+@keyframes raySpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Tablet & ponsel: GPU lemah -> sinar diam (tampilan tetap sama, hanya
+   tidak berputar) */
+@media (max-width: 860px) {
+  .char-rays i {
+    animation: none;
+    will-change: auto;
+  }
+}
+
+/* --- Karakter cutout + animasi idle floating ---
+   Gambar menempel ke atas (object-position top) dan --cut-scale membesar
+   ke BAWAH (transform-origin top), jadi kepala selalu di bawah fade atas.
+   Kaki yang melewati tepi bawah larut ke fade bawah section.
+   --cut-scale (per slide, di HTML) menyamakan ukuran visual karakter karena
+   tiap splash art punya margin transparan berbeda. */
+.char-cutout {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  left: var(--cx);
+  width: min(62vw, 980px);
+  padding: calc(var(--fade-top-h) * 0.75) 0 0;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  container-type: size; /* .char-layers mengukur kotak ini (cqw/cqh) */
+  /* --cut-shift (per slide, di HTML): geser art yang terlalu lebar ke kanan
+     supaya tidak menumpuk di belakang judul */
+  translate: calc(-50% + var(--cut-shift, 0%)) 0;
+  /* Masuk dari kanan saat slide aktif */
+  opacity: 0;
+  transform: translateX(6%);
+  transition: opacity 1s ease 0.15s, transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+}
+
+.char-slide.is-active .char-cutout {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Dua lapis: background (belakang) + splash art karakter (depan).
+   .char-layers = kotak persegi di posisi yang sama dengan gambar gabungan
+   2048x2048 versi lama (object-fit: contain, menempel ke atas), jadi
+   penempatan & --cut-scale tiap karakter tetap sama. Tiap lapis diletakkan
+   di dalamnya dengan --lx/--ly/--lw (persen dari sisi kotak, di HTML). */
+.char-layers {
+  position: relative;
+  align-self: flex-start;
+  flex: none;
+  width: min(100cqw, 100cqh);
+  aspect-ratio: 1;
+  transform: scale(var(--cut-scale, 1));
+  transform-origin: 50% 0;
+  /* Sengaja TANPA filter drop-shadow: lapis di dalamnya terus beranimasi,
+     jadi blur bayangan seluas art ini dihitung ulang tiap frame (penyebab
+     utama section terasa berat). Lapis background art sudah ada di
+     belakang karakter, bayangan nyaris tidak terlihat. */
+}
+
+.char-layer {
+  position: absolute;
+  left: var(--lx, 0%);
+  top: var(--ly, 0%);
+  width: var(--lw, 100%);
+  max-width: none;
+  height: auto;
+  will-change: transform;
+}
+
+/* Parallax: karakter melayang 5s, background drift 10s (setengah kecepatan)
+   dengan jarak lebih kecil + zoom pelan ala Ken Burns hero */
+.char-layer--fg {
+  animation: charFloat 5s ease-in-out infinite;
+}
+
+.char-layer--bg {
+  animation: charBgDrift 10s ease-in-out infinite;
+}
+
+@keyframes charFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-22px) rotate(-0.6deg); }
+}
+
+@keyframes charBgDrift {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-8px) scale(1.03); }
+}
+
+/* Scrim bawah + kiri supaya caption selalu terbaca */
+.char-slide-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(to top, rgba(5, 6, 15, 0.8) 0%, transparent 32%),
+    linear-gradient(to right, rgba(5, 6, 15, 0.6) 0%, transparent 42%);
+  pointer-events: none;
+}
+
+/* Partikel section ini di atas karakter -> kesan kedalaman */
+.char-spotlight > .particle-canvas {
+  z-index: 3;
+}
+
+/* --- Caption karakter --- */
+.char-caption {
+  position: absolute;
+  z-index: 4;
+  left: clamp(1.25rem, 6vw, 6rem);
+  bottom: clamp(4.5rem, 11vh, 6.5rem);
+  max-width: min(560px, calc(100% - 2.5rem));
+  /* Diangkur dari ATAS (bukan translateY(-40%)): badge & nama selalu mulai
+     di tinggi yang sama di semua slide. Dulu nama 2 baris (Himeko Nova, Rin
+     Tohsaka) membuat caption naik lebih tinggi dari slide nama 1 baris. */
+  top: calc(50% - 3.5rem);
+  bottom: auto;
+}
+
+/* Caption slide yang keluar hilang cepat (0.2s), jauh sebelum caption slide
+   baru mulai animasi masuk (delay 0.3s di animateCaption). Tanpa ini caption
+   lama ikut crossfade 0.9s bersama slide-nya -> teks badge & nama slide lama
+   dan baru bertumpuk di posisi yang sama (terlihat dobel/ghosting). */
+.char-slide:not(.is-active) .char-caption {
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+}
+
+/* Dipakai juga untuk tag di About (warna lewat --accent inline) */
+.char-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.85rem 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fff;
+  border: 1px solid color-mix(in srgb, var(--accent) 70%, transparent);
+  background: color-mix(in srgb, var(--accent) 25%, rgba(5, 6, 15, 0.6));
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+
+.char-badge::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+/* Varian badge dengan icon Element & Path (gambar asli dari assets/images/Path)
+   menggantikan teks "Elemen · Path". Diamond ::before dilepas, icon elemen
+   mengambil alih posisinya sebagai penanda warna tema. */
+.char-badge--icon {
+  gap: 0.45rem;
+  padding-left: 0.65rem;
+}
+
+.char-badge--icon::before {
+  display: none;
+}
+
+.char-badge-icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 80%, transparent));
+}
+
+.char-badge-sep {
+  opacity: 0.55;
+}
+
+.char-badge-path {
+  margin-left: 0.1rem;
+}
+
+/* Nama karakter: besar, italic-skew, gradient + glow warna elemen */
+/* Nama karakter sebagai grafis judul (Home). File punya ruang transparan:
+   kotak .char-title-art seukuran area terlihat (--crop-*, px dari file
+   --img-w x --img-h), gambar digeser di dalamnya -> ukuran & posisi
+   konsisten antar karakter. Bobbing pelan + kilau diagonal yang di-mask ke
+   alpha gambar (teknik sama dengan .loader-shine / .hero-title-art); URL
+   mask diset inline per slide supaya path relatif ke halaman. */
+.char-title {
+  margin-top: 0.9rem;
+  width: min(100%, clamp(260px, 34vw, 500px));
+}
+
+.char-title-art {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--crop-w) / var(--crop-h);
+  animation: charTitleFloat 5s ease-in-out infinite;
+}
+
+/* Bayangan di gambar judul saja (statis -> di-raster sekali), bukan di
+   .char-title-art yang melayang & berisi kilau bergerak: filter di sana
+   membuat blur dihitung ulang tiap frame */
+.char-title-art img {
+  filter: drop-shadow(0 4px 14px rgba(5, 6, 15, 0.7));
+}
+
+.char-title-art img,
+.char-title-shine {
+  position: absolute;
+  left: calc(var(--crop-x) / var(--crop-w) * -100%);
+  top: calc(var(--crop-y) / var(--crop-h) * -100%);
+  width: calc(var(--img-w) / var(--crop-w) * 100%);
+  height: calc(var(--img-h) / var(--crop-h) * 100%);
+  max-width: none;
+}
+
+/* Kilau: elemen ini hanya memegang mask (alpha judul, URL inline di HTML)
+   dan diam; gradient-nya di ::before yang digeser lewat transform. Dulu
+   memakai animasi background-position -> repaint area judul tiap frame. */
+.char-title-shine {
+  overflow: hidden;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  pointer-events: none;
+}
+
+/* Lebar 250% + geser -60% -> 0 = sama persis dengan background-size 250%
+   & background-position 100% -> 0% (keyframes loaderShine) versi lama */
+.char-title-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 250%;
+  background: linear-gradient(105deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.15) 45%,
+    rgba(255, 255, 255, 0.85) 50%,
+    rgba(255, 255, 255, 0.15) 55%,
+    transparent 62%);
+  transform: translateX(-60%);
+  animation: charTitleShine 3.5s ease-in-out 0.8s infinite;
+  will-change: transform;
+}
+
+@keyframes charTitleShine {
+  0%        { transform: translateX(-60%); }
+  40%, 100% { transform: translateX(0); }
+}
+
+@keyframes charTitleFloat {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 2px -6px; }
+}
+
+.char-stars {
+  margin-top: 0.6rem;
+  font-size: 1.05rem;
+  letter-spacing: 0.2em;
+  color: var(--color-gold);
+  text-shadow: 0 0 10px rgba(247, 201, 72, 0.6);
+}
+
+.char-desc {
+  margin-top: 0.75rem;
+  font-size: clamp(0.98rem, 1.3vw, 1.12rem);
+  font-weight: 500;
+  color: #dbe2ee;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+}

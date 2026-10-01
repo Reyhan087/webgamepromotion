@@ -1,0 +1,219 @@
+/* =========================================================================
+   EVENT DETAIL (event.html?id=...)
+   Artikel (judul, tanggal, banner, isi) + sidebar "Berita Lainnya".
+   Kartu & chip memakai token yang sama dengan feed event.
+   ========================================================================= */
+.ed-inner {
+  max-width: 1200px;
+}
+
+.ed-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text-dim);
+  transition: color var(--transition-base);
+}
+
+.ed-back svg {
+  width: 18px;
+  height: 18px;
+  transition: transform var(--transition-base);
+}
+
+.ed-back:hover {
+  color: var(--color-primary-light);
+}
+
+.ed-back:hover svg {
+  transform: translateX(-3px);
+}
+
+.ed-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: clamp(1.5rem, 3vw, 2.75rem);
+  align-items: start;
+}
+
+.ed-title {
+  margin-top: 0.75rem;
+  font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+}
+
+.ed-date {
+  display: block;
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-cyan);
+}
+
+.ed-hero {
+  margin-top: 1.5rem;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(167, 139, 250, 0.35);
+  background: var(--color-bg-alt);
+  box-shadow: 0 30px 70px -35px rgba(139, 92, 246, 0.6);
+}
+
+.ed-hero img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Ringkasan (Periode / Hadiah / ...) */
+.ed-info {
+  margin: 1.5rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.ed-info > div {
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--color-card-border);
+  border-left: 3px solid var(--color-gold);
+  background: rgba(16, 19, 42, 0.8);
+}
+
+.ed-info dt {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.ed-info dd {
+  margin: 0.2rem 0 0;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.ed-body {
+  margin-top: 1.75rem;
+  color: #cbd5e1;
+  font-size: 1.08rem;
+  line-height: 1.75;
+}
+
+.ed-body p + p {
+  margin-top: 1.1rem;
+}
+
+.ed-body a {
+  color: var(--color-primary-light);
+  text-decoration: underline;
+}
+
+.ed-back-btn {
+  margin-top: 2.25rem;
+}
+
+/* --- Sidebar Berita Lainnya --- */
+.ed-aside {
+  position: sticky;
+  top: calc(var(--navbar-height) + 1.5rem);
+  padding: 1.25rem;
+  border-radius: 16px;
+  border: 1px solid var(--color-card-border);
+  background: linear-gradient(160deg, rgba(30, 22, 58, 0.7), rgba(16, 19, 42, 0.85));
+}
+
+.ed-aside-title {
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-card-border);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-cyan);
+}
+
+.ed-news {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: calc(100vh - var(--navbar-height) - 9rem);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(167, 139, 250, 0.4) transparent;
+}
+
+.ed-news-item {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.6rem;
+  border-radius: 10px;
+  color: inherit;
+  transition: background var(--transition-base);
+}
+
+.ed-news-item:hover,
+.ed-news-item:focus-visible {
+  background: rgba(139, 92, 246, 0.14);
+}
+
+.ed-news-thumb {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--color-bg-alt);
+}
+
+.ed-news-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease, filter var(--transition-base);
+}
+
+.ed-news-item:hover .ed-news-thumb img {
+  transform: scale(1.06);
+  filter: brightness(1.1);
+}
+
+.ed-news-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.ed-news-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #fff;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color var(--transition-base);
+}
+
+.ed-news-item:hover .ed-news-title {
+  color: var(--color-primary-light);
+}
+
+.ed-news-date {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-cyan);
+}

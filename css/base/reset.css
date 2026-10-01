@@ -1,0 +1,66 @@
+/* =========================================================================
+   RESET & BASE
+   ========================================================================= */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--navbar-height);
+}
+
+body {
+  /* Warna rata (tanpa radial glow): section transparan seperti About harus
+     sama persis dengan section ber-background --color-bg, supaya tidak ada
+     "pita" lebih terang di antara section */
+  background: var(--color-bg);
+  font-family: var(--font-body);
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Semua elemen interaktif wajib pakai cursor pointer yang jelas */
+button,
+a,
+.nav-link,
+.hamburger {
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 3px;
+}
+
+header,
+main,
+footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Canvas partikel (dibuat oleh js/lib/particles.js) - selalu di belakang konten
+   interaktif, tidak menangkap klik. z-index diatur per section di bawah. */
+.particle-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}

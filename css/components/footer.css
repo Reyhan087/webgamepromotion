@@ -1,0 +1,113 @@
+/* =========================================================================
+   FOOTER
+   ========================================================================= */
+/* Gradient dari warna section di atas (tanpa border) -> transisi mulus */
+.footer {
+  background: linear-gradient(to bottom, var(--color-bg) 0%, var(--color-bg-alt) 140px);
+  padding: 3rem 1.5rem 2.5rem;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+/* Logo HSR. File punya ruang transparan (sama dengan .hero-logo): area
+   terlihat x 15-678, y 104-426 (663x322) dari 690x542 -> kotak seukuran
+   area itu, gambar digeser di dalamnya. */
+.footer-logo {
+  position: relative;
+  display: block;
+  height: 64px;
+  aspect-ratio: 663 / 322;
+  overflow: hidden;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.5));
+  transition: transform var(--transition-base);
+}
+
+.footer-logo img {
+  position: absolute;
+  left: calc(-15 / 663 * 100%);
+  top: calc(-104 / 322 * 100%);
+  width: calc(690 / 663 * 100%);
+  height: calc(542 / 322 * 100%);
+  max-width: none;
+}
+
+.footer-logo:hover {
+  transform: scale(1.04);
+}
+
+/* Ikon media sosial (assets/images/Medsos) di tombol bulat kaca gelap,
+   gaya border ungu sama dengan .nav-link--cta / .carousel-arrow */
+.footer-social {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.social-link {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  background: rgba(5, 6, 15, 0.55);
+  isolation: isolate; /* blend ikon X hanya terhadap latar tombol ini */
+  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.social-link img {
+  display: block;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.social-link:hover,
+.social-link:focus-visible {
+  transform: translateY(-3px);
+  border-color: var(--color-primary-light);
+  box-shadow: 0 0 18px rgba(139, 92, 246, 0.45);
+}
+
+/* X.webp berlatar hitam pekat: mode screen menghapus hitamnya di atas
+   latar gelap, tinggal huruf X putih */
+.social-link--x img {
+  width: 30px;
+  height: 30px;
+  mix-blend-mode: screen;
+}
+
+/* Instagram: SVG inline (gradient resmi), bukan assets/images/Medsos/
+   Instagram.webp karena file itu thumbnail ber-watermark & berlatar abu-abu */
+.social-icon-svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.footer-divider {
+  margin: 2rem 0 1.5rem;
+  border: none;
+  border-top: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.footer-copyright {
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+}

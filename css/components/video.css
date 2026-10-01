@@ -1,0 +1,289 @@
+/* =========================================================================
+   VIDEO "KLIK-UNTUK-PLAY" (.yt-lite) - dipakai trailer kolaborasi & gameplay
+   Awalnya hanya thumbnail + tombol play. <iframe> YouTube dibuat oleh JS
+   (initLiteYouTube di js/components/video.js) setelah diklik -> halaman tetap ringan.
+   Bingkai memakai .video-frame yang sama dengan video Special Program.
+   ========================================================================= */
+.yt-lite-btn {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: #000;
+  color: #fff;
+}
+
+.yt-lite-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.78) saturate(1.1);
+  transition: transform 0.6s ease, filter var(--transition-base);
+}
+
+.yt-lite-btn:hover .yt-lite-thumb,
+.yt-lite-btn:focus-visible .yt-lite-thumb {
+  transform: scale(1.04);
+  filter: brightness(0.92) saturate(1.15);
+}
+
+/* Tombol play bulat (lingkaran putih + segitiga hitam) + cincin berdenyut.
+   Satu gaya untuk semua video .yt-lite: trailer kolaborasi & card gameplay. */
+.yt-lite-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(44px, 4.4vw, 58px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #0b0c14;
+  background: #fff;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45);
+  translate: -50% -50%;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+/* Path segitiga sudah bergeser ke kanan di dalam viewBox -> titik berat
+   (centroid) segitiga pas di tengah tanpa margin tambahan */
+.yt-lite-play svg {
+  width: 42%;
+  height: 42%;
+}
+
+.yt-lite-play::after {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  animation: playPulse 2.2s ease-out infinite;
+}
+
+.yt-lite-btn:hover .yt-lite-play,
+.yt-lite-btn:focus-visible .yt-lite-play {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18), 0 8px 28px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes playPulse {
+  0%   { transform: scale(0.85); opacity: 0.9; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+.yt-lite-hint {
+  position: absolute;
+  left: 1rem;
+  bottom: 0.9rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 6px;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: rgba(5, 6, 15, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* --- Band trailer kolaborasi di bawah carousel karakter --- */
+.char-section {
+  position: relative;
+  background: var(--color-bg);
+}
+
+.char-trailer {
+  position: relative;
+  z-index: 2; /* di atas sisa glow/floating carousel */
+  padding: clamp(3rem, 6vw, 5rem) 1.5rem;
+  /* Tanpa background sendiri: pakai starfield global halaman (body + partikel) */
+}
+
+.char-trailer-inner {
+  position: relative;
+  z-index: 1; /* di atas canvas partikel band */
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.char-trailer-title {
+  margin-top: 0.6rem;
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1.1;
+  background: linear-gradient(180deg, #fff6d6 0%, var(--color-gold) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-right: 0.1em;
+}
+
+.char-trailer-text p {
+  margin-top: 0.9rem;
+  color: var(--color-text-dim);
+  font-size: 1.05rem;
+}
+
+/* --- Video gameplay: 5 card sejajar, card .is-featured lebih besar ---
+   Lebar diatur lewat flex-grow (bisa di-transition), tinggi ikut aspect-ratio
+   16:9 dari .video-frame -> card featured otomatis lebih tinggi juga. */
+.gameplay-trailer {
+  max-width: 1200px;
+  margin: 3.5rem auto 0;
+}
+
+/* Panah kiri/kanan (gaya sama dengan .carousel-arrow hero) di sisi baris */
+.gv-stage {
+  position: relative;
+  padding-inline: 68px;
+}
+
+.gv-arrow.carousel-arrow--prev { left: 0; }
+.gv-arrow.carousel-arrow--next { right: 0; }
+
+.gv-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.6rem, 1.2vw, 1rem);
+  list-style: none;
+}
+
+/* Video diputar: card-nya pindah ke baris sendiri (order -1) selebar penuh,
+   card lain turun ke baris di bawahnya -> tidak ada yang bertumpuk. Tinggi
+   player dibatasi supaya tetap muat satu layar. */
+.gv-row.has-playing {
+  flex-wrap: wrap;
+  row-gap: 1.5rem;
+}
+
+.gv-card.is-playing {
+  flex: 0 0 100%;
+  order: -1;
+}
+
+.gv-card.is-playing .video-frame {
+  width: min(100%, (100svh - var(--navbar-height) - 8rem) * 16 / 9);
+  margin-inline: auto;
+}
+
+.gv-card.is-playing .gv-title {
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.gv-card {
+  flex: 1 1 0;
+  min-width: 0;
+  opacity: 0.72;
+  transition: flex-grow 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity var(--transition-base);
+}
+
+.gv-card:hover,
+.gv-card:focus-within,
+.gv-card.is-featured {
+  opacity: 1;
+}
+
+.gv-card.is-featured {
+  flex-grow: 2.2;
+}
+
+.gv-card .video-frame {
+  border-radius: 12px;
+  box-shadow: none;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.gv-card.is-featured .video-frame {
+  border-color: rgba(167, 139, 250, 0.85);
+  box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.35), 0 12px 48px rgba(139, 92, 246, 0.45);
+}
+
+/* Lebih kecil lagi di card biasa */
+.gv-card:not(.is-featured) .yt-lite-play {
+  width: clamp(28px, 2.4vw, 36px);
+}
+
+.gv-card:not(.is-featured) .yt-lite-play::after {
+  inset: -5px;
+}
+
+.gv-title {
+  margin-top: 0.6rem;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color var(--transition-base);
+}
+
+.gv-card.is-featured .gv-title {
+  font-size: 0.8rem;
+  color: var(--color-text);
+}
+
+.gameplay-trailer .video-caption {
+  max-width: 760px;
+  margin: 1.5rem auto 0;
+  text-align: center;
+}
+
+/* Layar sempit: baris bisa di-scroll horizontal, snap per card */
+@media (max-width: 860px) {
+  .gv-row {
+    align-items: flex-start;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 1rem;
+    margin-inline: -1rem;
+    padding: 0.5rem 1rem 0.75rem;
+    scrollbar-width: thin;
+  }
+
+  .gv-card {
+    flex: 0 0 64%;
+    scroll-snap-align: center;
+    transition: flex-basis 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity var(--transition-base);
+  }
+
+  .gv-card.is-featured {
+    flex-basis: 78%;
+  }
+
+  /* Mobile: baris tetap satu jalur (scroll); card yang diputar selebar layar */
+  .gv-row.has-playing {
+    flex-wrap: nowrap;
+  }
+
+  .gv-card.is-playing {
+    flex: 0 0 100%;
+    order: 0;
+  }
+
+  .gv-stage {
+    padding-inline: 0;
+  }
+
+  .gv-arrow {
+    width: 40px;
+    height: 40px;
+    top: calc(50% - 1rem); /* tengah thumbnail, bukan judul di bawahnya */
+  }
+
+  .gv-arrow.carousel-arrow--prev { left: -0.25rem; }
+  .gv-arrow.carousel-arrow--next { right: -0.25rem; }
+}

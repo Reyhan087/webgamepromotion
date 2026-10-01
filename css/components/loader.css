@@ -1,0 +1,97 @@
+/* =========================================================================
+   LOADING SCREEN
+   ========================================================================= */
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Logo HSR_Logo.webp (690x542) punya ruang transparan di sekelilingnya;
+   area yang terlihat = x 15-678, y 104-426 (663x322). Kotak .loader-logo
+   seukuran area itu, gambar digeser supaya bar bisa rapat di bawah logo
+   dan selebar logo. */
+.loader {
+  --loader-w: min(360px, 72vw);
+}
+
+.loader-logo {
+  position: relative;
+  width: var(--loader-w);
+  aspect-ratio: 663 / 322;
+  filter: drop-shadow(0 0 22px rgba(139, 92, 246, 0.45));
+}
+
+.loader-logo img,
+.loader-shine {
+  position: absolute;
+  left: calc(-15 / 663 * 100%);
+  top: calc(-104 / 322 * 100%);
+  width: calc(690 / 663 * 100%);
+  height: calc(542 / 322 * 100%);
+  max-width: none;
+}
+
+/* Kilau diagonal: gradient dengan pita terang, digeser dari kiri ke kanan.
+   Di-mask dengan alpha logo itu sendiri -> cahaya hanya muncul di piksel
+   logo, bukan sebagai persegi. Sapuan ~1s lalu jeda (siklus 2.6s). */
+.loader-shine {
+  background: linear-gradient(105deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.15) 45%,
+    rgba(255, 255, 255, 0.85) 50%,
+    rgba(255, 255, 255, 0.15) 55%,
+    transparent 62%) no-repeat;
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  -webkit-mask: url('../../assets/images/logo/HSR_Logo.webp') center / 100% 100% no-repeat;
+  mask: url('../../assets/images/logo/HSR_Logo.webp') center / 100% 100% no-repeat;
+  animation: loaderShine 2.6s ease-in-out 0.3s infinite;
+  pointer-events: none;
+}
+
+@keyframes loaderShine {
+  0%        { background-position: 100% 0; }
+  40%, 100% { background-position: 0% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-shine {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+.loader-bar {
+  width: var(--loader-w);
+  height: 3px;
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.loader-bar span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-cyan));
+  animation: loaderFill 1.1s ease forwards;
+}
+
+@keyframes loaderFill {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}

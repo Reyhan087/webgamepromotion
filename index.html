@@ -17,7 +17,7 @@
   <!-- Tailwind CSS (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    // Extend Tailwind dengan warna & font custom biar konsisten sama CSS variables di style.css
+    // Extend Tailwind dengan warna & font custom biar konsisten sama CSS variables di css/base/tokens.css
     tailwind.config = {
       theme: {
         extend: {
@@ -45,7 +45,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
-  <link rel="stylesheet" href="css/style.css?v=20261001" />
+  <link rel="stylesheet" href="css/style.css?v=20261002f" />
 </head>
 <body class="bg-space-deep text-slate-200 font-body overflow-x-hidden">
 
@@ -82,7 +82,7 @@
          - Tiap slide = <article data-slide>. Tambah slide baru cukup copy satu <article>.
          - data-align="left|right" mengatur posisi teks overlay (kiri/kanan bawah),
            dipilih per banner supaya tidak menutupi judul/wajah yang sudah ada di gambar.
-         - Dot indicator dibuat otomatis oleh JS (lihat Carousel di main.js).
+         - Dot indicator dibuat otomatis oleh JS (lihat Carousel di js/components/carousel.js).
     ================================================================= -->
     <section id="home" class="hero-carousel" data-carousel="hero" data-interval="6000"
              aria-roledescription="carousel" aria-label="Banner utama">
@@ -102,7 +102,7 @@
                class="hero-slide-img hero-slide-img--kenburns" width="1672" height="941" fetchpriority="high" />
           <div class="hero-slide-scrim" aria-hidden="true"></div>
 
-          <!-- Judul grafis: bobbing pelan + kilau diagonal (lihat .hero-title-art di style.css) -->
+          <!-- Judul grafis: bobbing pelan + kilau diagonal (lihat .hero-title-art di css/sections/hero.css) -->
           <div class="hero-title-art" aria-hidden="true">
             <img src="assets/images/logo/Title Screen 1.webp" alt="" width="2095" height="750" />
             <span class="hero-title-art-shine"></span>
@@ -113,7 +113,7 @@
 
           <!-- Tombol play trailer: pola .yt-lite yang sama dengan video gameplay.
                Setelah diklik, .hero-play jadi pemutar 16:9 di tengah hero
-               (kelas .is-playing dari initHeroTrailer di main.js). -->
+               (kelas .is-playing dari initHeroTrailer di js/sections/hero.js). -->
           <div class="hero-play yt-lite" data-yt-id="xT88aPknvag" data-yt-title="Honkai: Star Rail Version 4.4 Trailer - In Ravages Does the Whistle Sound">
             <button type="button" class="yt-lite-btn hero-play-btn" aria-label="Tonton trailer Versi 4.4: In Ravages Does the Whistle Sound">
               <span class="hero-play-icon">
@@ -190,7 +190,12 @@
           <div class="char-slide-scrim" aria-hidden="true"></div>
 
           <div class="char-caption">
-            <span class="char-badge" data-anim>Fire &middot; Erudition</span>
+            <span class="char-badge char-badge--icon" data-anim>
+              <img src="assets/images/Path/Type_Fire.webp" alt="Fire" class="char-badge-icon" width="64" height="64" loading="lazy" />
+              <span class="char-badge-sep" aria-hidden="true">&middot;</span>
+              <img src="assets/images/Path/Icon_Erudition.webp" alt="" class="char-badge-icon" width="64" height="64" loading="lazy" />
+              <span class="char-badge-path">Erudition</span>
+            </span>
             <h3 class="char-title" data-anim>
               <span class="char-title-art" style="--img-w: 1980; --img-h: 1080; --crop-x: 33; --crop-y: 217; --crop-w: 1905; --crop-h: 607;">
                 <img src="assets/images/logo/Himekonova title.webp" alt="Himeko Nova" width="1980" height="1080" loading="lazy" />
@@ -218,7 +223,12 @@
           <div class="char-slide-scrim" aria-hidden="true"></div>
 
           <div class="char-caption">
-            <span class="char-badge" data-anim>Ice &middot; Kolaborasi Fate</span>
+            <span class="char-badge char-badge--icon" data-anim>
+              <img src="assets/images/Path/Type_Quantum.webp" alt="Quantum" class="char-badge-icon" width="64" height="64" loading="lazy" />
+              <span class="char-badge-sep" aria-hidden="true">&middot;</span>
+              <img src="assets/images/Path/Icon_Erudition.webp" alt="" class="char-badge-icon" width="64" height="64" loading="lazy" />
+              <span class="char-badge-path">Erudition</span>
+            </span>
             <h3 class="char-title" data-anim>
               <span class="char-title-art" style="--img-w: 1980; --img-h: 1080; --crop-x: 74; --crop-y: 319; --crop-w: 1906; --crop-h: 368;">
                 <img src="assets/images/logo/Rin Title.webp" alt="Rin Tohsaka" width="1980" height="1080" loading="lazy" />
@@ -246,7 +256,12 @@
           <div class="char-slide-scrim" aria-hidden="true"></div>
 
           <div class="char-caption">
-            <span class="char-badge" data-anim>Imaginary &middot; Kolaborasi Fate</span>
+            <span class="char-badge char-badge--icon" data-anim>
+              <img src="assets/images/Path/Type_Lightning.webp" alt="Lightning" class="char-badge-icon" width="64" height="64" loading="lazy" />
+              <span class="char-badge-sep" aria-hidden="true">&middot;</span>
+              <img src="assets/images/Path/Icon_Destruction.webp" alt="" class="char-badge-icon" width="64" height="64" loading="lazy" />
+              <span class="char-badge-path">Destruction</span>
+            </span>
             <h3 class="char-title" data-anim>
               <span class="char-title-art" style="--img-w: 2816; --img-h: 1536; --crop-x: 206; --crop-y: 396; --crop-w: 2542; --crop-h: 736;">
                 <img src="assets/images/logo/Gilgamesh Title transparent.webp" alt="Gilgamesh" width="2816" height="1536" loading="lazy" />
@@ -457,7 +472,7 @@
         </div>
 
         <!-- Video gameplay: 5 card klik-untuk-play (lihat initLiteYouTube &
-             initGameplayVideos di main.js). Card .is-featured tampil lebih besar;
+             initGameplayVideos di js/components/video.js). Card .is-featured tampil lebih besar;
              card yang diputar otomatis jadi featured & membesar selebar baris
              (.is-playing). Panah .gv-arrow: pindah featured / video berikutnya.
              Thumbnail diambil langsung
@@ -583,13 +598,23 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-top">
-        <a href="#home" class="footer-logo">HONKAI<span>: STAR RAIL</span></a>
+        <a href="#home" class="footer-logo" aria-label="Honkai: Star Rail - kembali ke beranda">
+          <img src="assets/images/logo/HSR_Logo.webp" alt="Honkai: Star Rail" width="690" height="542" loading="lazy" />
+        </a>
 
         <div class="footer-social">
-          <a href="#" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">Instagram</a>
-          <a href="#" class="social-link" aria-label="YouTube" target="_blank" rel="noopener">YouTube</a>
-          <a href="#" class="social-link" aria-label="X / Twitter" target="_blank" rel="noopener">X</a>
-          <a href="#" class="social-link" aria-label="Discord" target="_blank" rel="noopener">Discord</a>
+          <a href="https://discord.com/invite/honkaistarrail" class="social-link social-link--discord" aria-label="Discord Honkai: Star Rail" target="_blank" rel="noopener noreferrer">
+            <img src="assets/images/Medsos/discord.webp" alt="" width="661" height="512" loading="lazy" />
+          </a>
+          <a href="https://www.youtube.com/@HonkaiStarRail" class="social-link social-link--youtube" aria-label="YouTube Honkai: Star Rail" target="_blank" rel="noopener noreferrer">
+            <img src="assets/images/Medsos/YouTube.webp" alt="" width="800" height="553" loading="lazy" />
+          </a>
+          <a href="https://www.instagram.com/honkaistarrail/" class="social-link social-link--instagram" aria-label="Instagram Honkai: Star Rail" target="_blank" rel="noopener noreferrer">
+            <svg class="social-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><defs><radialGradient id="igGrad" gradientUnits="userSpaceOnUse" cx="7" cy="23" r="24"><stop offset="0" stop-color="#fdf497" /><stop offset="0.12" stop-color="#fdf497" /><stop offset="0.45" stop-color="#fd5949" /><stop offset="0.65" stop-color="#d6249f" /><stop offset="1" stop-color="#285aeb" /></radialGradient></defs><rect x="2.6" y="2.6" width="18.8" height="18.8" rx="5.6" fill="none" stroke="url(#igGrad)" stroke-width="2.2" /><circle cx="12" cy="12" r="4.4" fill="none" stroke="url(#igGrad)" stroke-width="2.2" /><circle cx="17.3" cy="6.7" r="1.35" fill="url(#igGrad)" /></svg>
+          </a>
+          <a href="https://x.com/honkaistarrail" class="social-link social-link--x" aria-label="X Honkai: Star Rail" target="_blank" rel="noopener noreferrer">
+            <img src="assets/images/Medsos/X.webp" alt="" width="960" height="960" loading="lazy" />
+          </a>
         </div>
       </div>
 
@@ -601,7 +626,21 @@
     </div>
   </footer>
 
-  <script src="js/particles.js?v=20261001"></script>
-  <script src="js/main.js?v=20261001"></script>
+  <!-- JS: lib -> data -> core -> components -> sections -> pages -> main.js -->
+  <script src="js/lib/particles.js?v=20261002f"></script>
+  <script src="js/core/utils.js?v=20261002f"></script>
+  <script src="js/components/loader.js?v=20261002f"></script>
+  <script src="js/components/navbar.js?v=20261002f"></script>
+  <script src="js/components/particle-layers.js?v=20261002f"></script>
+  <script src="js/components/carousel.js?v=20261002f"></script>
+  <script src="js/components/video.js?v=20261002f"></script>
+  <script src="js/components/scroll-reveal.js?v=20261002f"></script>
+  <script src="js/sections/hero.js?v=20261002f"></script>
+  <script src="js/sections/character-spotlight.js?v=20261002f"></script>
+  <script src="js/sections/program.js?v=20261002f"></script>
+  <script src="js/pages/events.js?v=20261002f"></script>
+  <script src="js/pages/event-detail.js?v=20261002f"></script>
+  <script src="js/pages/character.js?v=20261002f"></script>
+  <script src="js/main.js?v=20261002f"></script>
 </body>
 </html>

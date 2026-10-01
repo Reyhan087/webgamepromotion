@@ -1,0 +1,553 @@
+/* =========================================================================
+   RESPONSIVE - TABLET & MOBILE
+   ========================================================================= */
+@media (max-width: 960px) {
+  .program-grid,
+  .char-trailer-inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Jendela pendek (desktop): halaman karakter menyusut mengikuti tinggi
+   viewport supaya judul, panel, dan filmstrip muat tanpa scroll. Nilai vh
+   dipilih agar di batas 1010px hasilnya ~sama dengan ukuran normal (tidak
+   ada lompatan); di jendela lebih tinggi aturan normal di atas berlaku.
+   Posisi art per karakter (--body-x, --art-y) tetap sama, hanya skala ikut
+   --orig-h. Tinggi panel tetap disamakan JS (--content-h). */
+@media (max-height: 1010px) and (min-width: 861px) {
+  .cp-section {
+    padding-top: calc(var(--navbar-height) + 1.5vh);
+  }
+
+  .cp-layout {
+    --orig-h: 57.6vh;
+    --box-h: 54vh;
+  }
+
+  .cp-stage-info {
+    padding-block: 3.2vh;
+  }
+
+  .cp-stage-faction {
+    margin-bottom: 1.2vh;
+    font-size: clamp(0.62rem, 1.4vh, 0.75rem);
+  }
+
+  .cp-stage .char-badge {
+    font-size: clamp(0.68rem, 1.5vh, 0.8rem);
+  }
+
+  /* Layar pendek: lebar grafis ikut tinggi layar supaya panel tetap muat */
+  .cp-title {
+    margin-top: 1.2vh;
+    width: min(100%, 36vh);
+  }
+
+  .cp-stage .char-stars {
+    margin-top: 0.8vh;
+    font-size: clamp(0.85rem, 1.9vh, 1.05rem);
+  }
+
+  .cp-bio {
+    margin-top: 1.6vh;
+    padding: 1.3vh 1.15rem;
+  }
+
+  .cp-bio p {
+    font-size: clamp(0.85rem, 1.9vh, 1rem);
+    line-height: 1.4;
+  }
+
+  .cp-film {
+    margin-top: 0.6vh;
+  }
+
+  .cp-film-track {
+    padding-block: 0.5vh;
+  }
+
+  .cp-thumb {
+    width: clamp(56px, 10.5vh, 108px);
+  }
+}
+
+@media (max-width: 860px) {
+  /* Sidebar jadi baris horizontal di atas panel, garis ikut horizontal */
+  .cp-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cp-factions {
+    --cp-icon: 72px;
+    margin-top: 0;
+  }
+
+  .cp-page-label {
+    position: static;
+    display: flex;
+    margin-top: 1.5rem;
+  }
+
+  .cp-faction-list {
+    flex-direction: row;
+    gap: 1.25rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .cp-faction-list::before {
+    top: calc(0.5rem + var(--cp-icon) / 2 - 1px);
+    bottom: auto;
+    left: 1.5rem;
+    right: 1.5rem;
+    width: auto;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.45) 15%, rgba(167, 139, 250, 0.45) 85%, transparent);
+  }
+
+  .cp-faction {
+    width: auto;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  /* Panel: gambar di atas, teks di bawah; art boleh keluar di atas kotak */
+  .cp-stage {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-end;
+    min-height: calc(min(78vw, 420px) + var(--content-h, 0px) + 2px);
+    margin-top: 2rem;
+    padding-top: min(78vw, 420px);
+  }
+
+  .cp-stage-img {
+    left: 50%;
+    top: 0;
+    bottom: auto;
+    height: min(95vw, 520px);
+    translate: calc(var(--body-x) * -1) calc(var(--art-y) - 8%);
+  }
+
+  .cp-stage::after {
+    background: linear-gradient(180deg, transparent 0%, transparent 35%, rgba(5, 6, 15, 0.85) 62%);
+  }
+
+  .cp-stage-info {
+    width: 100%;
+    padding: 1.25rem;
+  }
+
+  .cp-thumb {
+    width: 88px;
+  }
+}
+
+@media (max-width: 960px) {
+  /* Detail event: sidebar pindah ke bawah artikel */
+  .ed-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ed-aside {
+    position: static;
+  }
+
+  .ed-news {
+    max-height: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .event-row {
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 0.85rem;
+    padding: 0.7rem;
+  }
+
+  .event-row-desc {
+    font-size: 0.88rem;
+  }
+}
+
+@media (max-width: 860px) {
+  /* Drawer transparan yang pop/keluar dari kanan (bukan dropdown dari atas):
+     fixed full-height di sisi kanan, latar gelap semi-transparan (blur)
+     supaya konten di belakangnya tetap terlihat. */
+  .navbar-links {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: auto;
+    bottom: 0;
+    width: min(78vw, 300px);
+    height: 100svh;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start; /* link mulai dari atas, tepat di bawah tombol X */
+    gap: 0;
+    background: rgba(5, 6, 15, 0.78); /* semi-transparan gelap, konten belakang samar */
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: none;
+    border-left: 1px solid rgba(139, 92, 246, 0.25);
+    box-shadow: -24px 0 60px -24px rgba(0, 0, 0, 0.65);
+    padding: calc(var(--navbar-height) + 1rem) 1.75rem 2rem;
+    transform: translateX(100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-base), transform var(--transition-base), visibility var(--transition-base);
+  }
+
+  .navbar-links.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+  }
+
+  .navbar-links li {
+    width: 100%;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+  }
+
+  .nav-link {
+    display: block;
+    padding: 0.9rem 0;
+  }
+
+  .nav-link--cta {
+    display: inline-flex;
+    margin: 0.9rem 0;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  /* Character spotlight mobile: karakter di atas, caption di bawah */
+  .char-spotlight {
+    --cx: 50%;
+    --cy: 34%;
+    min-height: 600px;
+    max-height: 760px;
+  }
+
+  .char-cutout {
+    bottom: 32%;
+    width: 100vw;
+    padding: calc(var(--fade-top-h) * 0.75) 0 40px;
+    translate: -50% 0; /* caption di bawah art -> --cut-shift tidak perlu */
+  }
+
+  .char-caption {
+    top: auto;
+    bottom: clamp(4.5rem, 11vh, 6.5rem);
+    transform: none;
+  }
+
+  .char-slide-scrim {
+    background: linear-gradient(to top, rgba(5, 6, 15, 0.92) 0%, rgba(5, 6, 15, 0.45) 40%, transparent 58%);
+  }
+}
+
+@media (max-width: 640px) {
+  .preview-thumb span {
+    font-size: 0.68rem;
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+
+  .section {
+    padding: 4.5rem 1rem;
+  }
+
+  /* Hero mobile: semua teks di bawah, rata kiri, lebar penuh */
+  .hero-caption,
+  .hero-slide[data-align="right"] .hero-caption {
+    left: 1rem;
+    right: 1rem;
+    max-width: none;
+    text-align: left;
+  }
+
+  .hero-slide[data-align="right"] .hero-cta {
+    justify-content: flex-start;
+  }
+
+  .hero-logo {
+    top: 0.75rem;
+    left: 1rem;
+    height: 100px; /* kiri-atas, hamburger tetap bebas di kanan */
+  }
+
+  .hero-play-icon {
+    width: 96px;
+  }
+
+  /* Caption pindah ke bawah-penuh di mobile -> judul grafis naik ke atas */
+  .hero-slide {
+    --title-x: 0.75rem;
+    --title-w: min(78vw, 420px);
+  }
+
+  .hero-title-art {
+    bottom: auto;
+    /* di bawah .hero-logo (0.75rem + 100px) */
+    top: calc(0.75rem + 100px + 1rem);
+  }
+
+  /* Layar sempit: tidak muat di kanan "Sound" -> tepat di bawahnya,
+     rata kanan dengan akhir judul */
+  .hero-play:not(.is-playing) {
+    left: auto;
+    right: max(0.5rem, calc(100% - var(--title-x) - var(--title-w)));
+    bottom: auto;
+    top: calc(0.75rem + 100px + 1rem + var(--title-w) * 750 / 2095);
+    translate: 0 0;
+  }
+
+  .hero-slide .hero-slide-scrim,
+  .hero-slide[data-align] .hero-slide-scrim {
+    background:
+      linear-gradient(to bottom, rgba(5, 6, 15, 0.55) 0%, transparent 18%),
+      linear-gradient(to top, rgba(5, 6, 15, 0.95) 0%, rgba(5, 6, 15, 0.6) 40%, transparent 65%);
+  }
+
+  .hero-cta .btn {
+    flex: 1 1 auto;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .char-caption {
+    left: 1rem;
+    right: 1rem;
+    max-width: none;
+  }
+
+  /* Label video tetap satu baris di layar sempit */
+  .yt-lite-hint {
+    left: 0.6rem;
+    bottom: 0.6rem;
+    max-width: calc(100% - 1.2rem);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .preview-stage {
+    aspect-ratio: 4 / 5;
+  }
+
+  /* Panah lebih kecil & naik sedikit supaya tidak menutupi teks */
+  .carousel-arrow {
+    width: 40px;
+    height: 40px;
+    top: 42%;
+  }
+
+  .carousel-arrow svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .footer-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* =========================================================================
+   RESPONSIVE PASS - TABLET & PONSEL (hanya <= 860px, desktop tidak berubah)
+   ========================================================================= */
+@media (max-width: 860px) {
+  /* Menu terbuka: bar navbar ikut kaca tipis (bukan solid) supaya tombol
+     hamburger tetap terbaca tanpa menutup habis logo hero di belakangnya */
+  .navbar:has(.navbar-links.is-open) {
+    background: rgba(5, 6, 15, 0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom-color: rgba(139, 92, 246, 0.2);
+  }
+
+  /* Area sentuh hamburger 44px; ikon tetap 32px & rata kanan seperti semula */
+  .hamburger {
+    width: 44px;
+    height: 44px;
+    padding: 0 6px;
+    margin-right: -6px;
+    /* Di atas drawer (fixed) supaya tombol X tetap bisa ditekan */
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Link di drawer masuk bertahap dari kanan saat menu dibuka */
+  .navbar-links li {
+    opacity: 0;
+    transform: translateX(24px);
+    transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .navbar-links.is-open li {
+    opacity: 1;
+    transform: none;
+  }
+
+  .navbar-links.is-open li:nth-child(1) { transition-delay: 0.06s; }
+  .navbar-links.is-open li:nth-child(2) { transition-delay: 0.1s; }
+  .navbar-links.is-open li:nth-child(3) { transition-delay: 0.14s; }
+  .navbar-links.is-open li:nth-child(4) { transition-delay: 0.18s; }
+  .navbar-links.is-open li:nth-child(5) { transition-delay: 0.22s; }
+
+  /* Ponsel landscape: daftar link bisa discroll kalau tidak muat */
+  .navbar-links {
+    max-height: 100svh;
+    overflow-y: auto;
+  }
+
+  .navbar-links .nav-link--cta {
+    justify-content: center;
+    min-width: 9rem;
+    padding: 0.7rem 1.5rem;
+    margin: 1rem 0 0.25rem;
+  }
+
+  .navbar-links li {
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  }
+
+  .navbar-links li:last-child {
+    border-bottom: none;
+  }
+
+  /* Grafis nama di panel karakter tidak melebar memenuhi tablet */
+  .cp-title {
+    width: min(100%, 440px);
+  }
+
+  /* Panah video gameplay: area sentuh 44px */
+  .gv-arrow {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Tablet: card video gameplay lebih kecil supaya terlihat 2 sekaligus */
+@media (min-width: 641px) and (max-width: 860px) {
+  .gv-card {
+    flex-basis: 42%;
+  }
+
+  .gv-card.is-featured {
+    flex-basis: 56%;
+  }
+}
+
+@media (max-width: 640px) {
+  /* --- Hero: lebih pendek dari layar penuh supaya banner landscape tidak
+     ter-zoom berlebihan di layar potret --- */
+  .hero-carousel {
+    height: min(100vh, 170vw);
+    height: min(100svh, 170vw);
+    min-height: 480px;
+  }
+
+  .hero-slide-img {
+    object-position: 55% center;
+  }
+
+  /* Judul grafis kembali ke kiri-bawah (area gelap, tidak menutupi wajah),
+     tombol play tetap di kanan "Sound" seperti desktop. Lebar judul + jarak
+     + ikon play selalu muat: 68vw + 0.25rem + 21vw < 100vw. */
+  .hero-slide {
+    --title-x: 0.75rem;
+    --title-b: 3.5rem;
+    --title-w: min(68vw, 420px);
+  }
+
+  .hero-title-art {
+    top: auto;
+    bottom: var(--title-b);
+  }
+
+  .hero-play:not(.is-playing) {
+    left: calc(var(--title-x) + var(--title-w) + 0.25rem);
+    right: auto;
+    top: auto;
+    bottom: calc(var(--title-b) + var(--title-w) * 750 / 2095 * 0.32);
+    translate: 0 50%;
+  }
+
+  .hero-play-icon {
+    width: clamp(64px, 21vw, 96px);
+  }
+
+  /* --- Gameplay Highlights: tetap marquee bergeser otomatis seperti
+     desktop, item diperkecil saja supaya pas di layar sempit --- */
+  .gameplay-marquee {
+    margin-top: 2.5rem;
+  }
+
+  .gameplay-item {
+    padding: 0.5rem 0.25rem;
+  }
+
+  .gameplay-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1.1rem;
+  }
+
+  .gameplay-title {
+    font-size: 0.9rem;
+    line-height: 1.3;
+  }
+
+  .gameplay-desc {
+    font-size: 0.88rem;
+  }
+
+  /* --- Area sentuh minimal 44px --- */
+  .carousel-arrow {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Footer: logo sedikit lebih kecil; tombol medsos 46px sudah >= 44px */
+  .footer-logo {
+    height: 52px;
+  }
+
+  .footer-social {
+    gap: 0.75rem;
+  }
+
+  .footer-top {
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 380px) {
+  /* Ponsel kecil: thumbnail event di atas teks, selebar kartu */
+  .event-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ed-news-item {
+    grid-template-columns: 84px minmax(0, 1fr);
+  }
+}
+
+/* Hormati preferensi user yang mematikan animasi */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
